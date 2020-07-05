@@ -1,6 +1,6 @@
 {
   "hooks": {
-    "pre-commit": "lint-staged -c './config/.lintstagedrc' && npm test",
+    "pre-commit": "lint-staged -c './config/.lintstagedrc'",
     "commit-msg": "commitlint -E HUSKY_GIT_PARAMS -g './config/git/commitlint.js'"
   }
 }
