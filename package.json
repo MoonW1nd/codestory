@@ -1,44 +1,56 @@
 {
-  "name": "code-story",
-  "version": "0.0.1",
-  "description": "Tool for parse git reflog",
-  "main": "./lib/index.js",
-  "bin": {
-    "cstory": "./lib/index.js"
-  },
-  "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "create": "npm run build && npm run test",
-    "build": "tsc -p .",
-    "test": "sudo npm i -g && cstory",
-    "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
-    "cm": "git-cz",
-    "release": "standard-version"
-  },
-  "author": "Alexander Ivankov",
-  "license": "MIT",
-  "dependencies": {
-    "chalk": "^4.1.0",
-    "clear": "^0.1.0",
-    "figlet": "^1.4.0",
-    "path": "^0.12.7",
-    "yargs": "^15.4.0"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^9.0.1",
-    "@commitlint/config-conventional": "^9.0.1",
-    "@types/node": "^14.0.14",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^3.5.0",
-    "commitizen": "^4.1.2",
-    "cz-conventional-changelog": "^3.2.0",
-    "eslint": "^7.4.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "nodemon": "^2.0.4",
-    "prettier": "^2.0.5",
-    "standard-version": "^8.0.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.6"
-  }
+    "name": "code-story",
+    "version": "0.0.1",
+    "description": "Tool for parse git reflog",
+    "main": "./lib/index.js",
+    "bin": {
+        "cstory": "./lib/index.js"
+    },
+    "scripts": {
+        "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+        "create": "npm run build && npm run test",
+        "build": "tsc -p .",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "test:local": "sudo npm i -g && cstory",
+        "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
+        "cm": "npx git-cz",
+        "release": "standard-version"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "author": "Alexander Ivankov",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^4.1.0",
+        "clear": "^0.1.0",
+        "figlet": "^1.4.0",
+        "gitlog": "^4.0.0",
+        "path": "^0.12.7",
+        "yargs": "^15.4.0"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^9.0.1",
+        "@commitlint/config-conventional": "^9.0.1",
+        "@types/clear": "^0.1.0",
+        "@types/figlet": "^1.2.0",
+        "@types/node": "^14.0.14",
+        "@types/yargs": "^15.0.5",
+        "@typescript-eslint/eslint-plugin": "^2.27.0",
+        "@typescript-eslint/parser": "^3.5.0",
+        "commitizen": "^4.1.2",
+        "cz-conventional-changelog": "^3.2.0",
+        "eslint": "^7.4.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.11",
+        "nodemon": "^2.0.4",
+        "prettier": "^2.0.5",
+        "standard-version": "^8.0.0",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.9.6"
+    }
 }
