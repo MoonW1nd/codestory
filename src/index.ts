@@ -5,8 +5,9 @@ import figlet from 'figlet';
 import yargs from 'yargs';
 import {spawn} from 'child_process';
 import {GitlogOptions, gitlogPromise} from 'gitlog';
+import {getBranchInfoFromNameRev, BranchInfo} from './helpers';
 
-// clear();
+clear();
 console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'})));
 
 const argv = yargs.options({
@@ -16,18 +17,18 @@ const argv = yargs.options({
 const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
     repo: process.cwd(),
     author: 'Alexander Ivankov',
+    number: 50,
     fields: ['authorDate', 'subject', 'hash'],
     execOptions: {maxBuffer: 1000 * 1024},
     since: argv.since,
     all: true,
 };
 
-type Commit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
+type GitLogCommit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
+type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
-const addCommitBranchNameP = (commit: Commit) => {
+const addCommitBranchInfoP = (commit: GitLogCommit): Promise<Commit> => {
     return new Promise((resolve, reject) => {
-        console.log(commit.hash);
-
         const revNameCommand = spawn('git', ['name-rev', commit.hash]);
         let revNameResult = '';
 
@@ -43,7 +44,7 @@ const addCommitBranchNameP = (commit: Commit) => {
         revNameCommand.on('close', (code) => {
             resolve({
                 ...commit,
-                branchName: revNameResult,
+                branchInfo: getBranchInfoFromNameRev(revNameResult),
             });
 
             return code;
@@ -51,13 +52,13 @@ const addCommitBranchNameP = (commit: Commit) => {
     });
 };
 
-const ensureCommitsInfo = async (commits: Commit[]) => {
-    const commitsP = commits.map(addCommitBranchNameP);
+const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
+    const commitsP = commits.map(addCommitBranchInfoP);
 
     return await Promise.all(commitsP);
 };
 
-const getLog = async () => {
+const getLog = async (): Promise<void> => {
     const commits = await gitlogPromise(options);
 
     const ensuredCommits = await ensureCommitsInfo(commits);
