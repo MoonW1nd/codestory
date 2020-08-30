@@ -3,9 +3,8 @@ import chalk from 'chalk';
 import clear from 'clear';
 import figlet from 'figlet';
 import yargs from 'yargs';
-import {spawn} from 'child_process';
 import {GitlogOptions, gitlogPromise} from 'gitlog';
-import {getBranchInfoFromNameRev, BranchInfo} from './helpers';
+import {getBranchInfoFromNameRev, BranchInfo, runCommand} from './helpers';
 
 clear();
 console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'})));
@@ -27,51 +26,65 @@ const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
 type GitLogCommit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
 type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
-interface BranchesMap {
-    [index: string]: string[];
+interface Branch {
+    name: string;
+    commits: string[];
+    remoteName?: string;
+    repositoryUrl?: string;
+}
+
+interface BranchCollection {
+    [index: string]: Branch;
 }
 
 interface CommitCollection {
     [index: string]: Commit;
 }
 
-const addCommitBranchInfoP = (commit: GitLogCommit): Promise<Commit> => {
-    return new Promise((resolve, reject) => {
-        const revNameCommand = spawn('git', ['name-rev', commit.hash]);
-        let revNameResult = '';
+const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
+    const nameRevsP = commits.map((commit) => runCommand(`git name-rev ${commit.hash}`));
+    const nameRevs = await Promise.all(nameRevsP);
 
-        revNameCommand.stdout.on('data', (data) => {
-            revNameResult += data.toString();
-        });
-
-        revNameCommand.on('error', (error) => {
-            console.log('error', error);
-            reject(error);
-        });
-
-        revNameCommand.on('close', (code) => {
-            resolve({
-                ...commit,
-                branchInfo: getBranchInfoFromNameRev(revNameResult),
-            });
-
-            return code;
-        });
-    });
+    return commits.map((commit, i) => ({
+        ...commit,
+        branchInfo: getBranchInfoFromNameRev(nameRevs[i]),
+    }));
 };
 
-const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
-    const commitsP = commits.map(addCommitBranchInfoP);
+const ensureBranchInfo = async (
+    branchCollection: BranchCollection,
+    repositoryUrl: string,
+): Promise<BranchCollection> => {
+    const branchNames = Object.keys(branchCollection);
+    const remoteNames = await Promise.all(
+        branchNames.map((branchName) => runCommand(`git config --get branch.${branchName}.merge`)),
+    );
 
-    return await Promise.all(commitsP);
+    branchNames.map((branchName, i) => {
+        const remoteBranchName = remoteNames[i].replace(/^refs\/heads\//gi, '').trim();
+
+        if (remoteBranchName) {
+            branchCollection[branchName].remoteName = remoteBranchName;
+            branchCollection[branchName].repositoryUrl = `${repositoryUrl}/tree/${remoteBranchName}`;
+        }
+    });
+
+    return branchCollection;
+};
+
+const getRepositoryUrl = async (): Promise<string> => {
+    const gitRepositoryUrl = await runCommand('git config --get remote.origin.url');
+
+    return gitRepositoryUrl.replace(/\.git/gi, '').trim();
 };
 
 const getLog = async (): Promise<void> => {
     const commits = await gitlogPromise(options);
+    const repositoryUrl = await getRepositoryUrl();
 
     const ensuredCommits = await ensureCommitsInfo(commits);
 
-    const branches: BranchesMap = {};
+    const branches: BranchCollection = {};
     const commitCollection: CommitCollection = {};
 
     ensuredCommits.forEach((commit) => {
@@ -80,16 +93,25 @@ const getLog = async (): Promise<void> => {
         commitCollection[commit.hash] = commit;
 
         if (branches[branchName] !== undefined) {
-            branches[branchName].push(commit.hash);
+            branches[branchName].commits.push(commit.hash);
         } else {
-            branches[branchName] = [commit.hash];
+            branches[branchName] = {
+                name: branchName,
+                commits: [commit.hash],
+            };
         }
     });
 
-    Object.keys(branches).map((branchName) => {
-        console.log(chalk.magenta.bold(branchName));
+    await ensureBranchInfo(branches, repositoryUrl);
 
-        branches[branchName].map((commitHash) => {
+    const branchNames = Object.keys(branches);
+
+    branchNames.map((branchName) => {
+        console.log(
+            chalk.magenta.bold(branchName) + chalk.blue(` (${branches[branchName].repositoryUrl || 'local branch'})`),
+        );
+
+        branches[branchName].commits.map((commitHash) => {
             const commit = commitCollection[commitHash];
 
             console.log(`${chalk.dim.white(commit.authorDate.split(' ')[0])} ${chalk.bold.white(commit.subject)}`);

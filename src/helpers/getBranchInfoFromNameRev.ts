@@ -5,6 +5,7 @@ const SPACE_CHAR = ' ';
 export interface BranchInfo {
     name: string;
     position: number;
+    remote?: string;
 }
 
 /**
