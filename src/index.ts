@@ -4,13 +4,15 @@ import clear from 'clear';
 import figlet from 'figlet';
 import yargs from 'yargs';
 import {GitlogOptions, gitlogPromise} from 'gitlog';
-import {getBranchInfoFromNameRev, BranchInfo, runCommand} from './helpers';
+import {getBranchInfoFromNameRev, BranchInfo, runCommand, renderLineWithTitle, chalkUrl} from './helpers';
 
 clear();
 console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'})));
 
 const argv = yargs.options({
     since: {type: 'string'},
+    trackerUrl: {type: 'string'},
+    showFiles: {type: 'boolean'},
 }).argv;
 
 const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
@@ -19,7 +21,7 @@ const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
     number: 50,
     fields: ['authorDate', 'subject', 'hash'],
     execOptions: {maxBuffer: 1000 * 1024},
-    since: argv.since,
+    since: argv.since || '1.day.ago',
     all: true,
 };
 
@@ -40,6 +42,11 @@ interface BranchCollection {
 interface CommitCollection {
     [index: string]: Commit;
 }
+
+const TICKET_NAME_REGEXP = /[A-Z]{1,}-\d{1,}/g;
+const TRACKER_URL = argv.trackerUrl;
+const SHOW_FILES = argv.showFiles;
+const TAB = '    ';
 
 const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
     const nameRevsP = commits.map((commit) => runCommand(`git name-rev ${commit.hash}`));
@@ -65,7 +72,9 @@ const ensureBranchInfo = async (
 
         if (remoteBranchName) {
             branchCollection[branchName].remoteName = remoteBranchName;
-            branchCollection[branchName].repositoryUrl = `${repositoryUrl}/tree/${remoteBranchName}`;
+            branchCollection[branchName].repositoryUrl = `${repositoryUrl}/${
+                branchName === 'master' ? 'tree' : 'pull'
+            }/${remoteBranchName}`;
         }
     });
 
@@ -106,31 +115,49 @@ const getLog = async (): Promise<void> => {
 
     const branchNames = Object.keys(branches);
 
-    branchNames.map((branchName) => {
-        console.log(
-            chalk.magenta.bold(branchName) + chalk.blue(` (${branches[branchName].repositoryUrl || 'local branch'})`),
-        );
+    branchNames.map((branchName, i) => {
+        if (i > 0) {
+            console.log('');
+        }
+
+        console.log(chalk.magenta.bold(branchName));
+
+        const prUrl = chalkUrl(branches[branchName].repositoryUrl || 'local branch');
+
+        renderLineWithTitle('pr', prUrl);
+
+        const [ticketName] = branchName.match(TICKET_NAME_REGEXP) || [];
+
+        if (TRACKER_URL && ticketName) {
+            const ticketUrl = chalkUrl(`${TRACKER_URL}/${ticketName}`);
+
+            renderLineWithTitle('task', ticketUrl);
+        }
+
+        renderLineWithTitle('commits');
 
         branches[branchName].commits.map((commitHash) => {
             const commit = commitCollection[commitHash];
 
-            console.log(`${chalk.dim.white(commit.authorDate.split(' ')[0])} ${chalk.bold.white(commit.subject)}`);
+            console.log(`${TAB}${chalk.dim(commit.authorDate.split(' ')[0])} ${chalk.white(commit.subject)}`);
 
-            commit.files.map((file, i) => {
-                const status = commit.status[i];
+            if (SHOW_FILES) {
+                commit.files.map((file, i) => {
+                    const status = commit.status[i];
 
-                switch (status) {
-                    case 'M':
-                        console.log(chalk.yellow(`  M ${file}`));
-                        break;
-                    case 'D':
-                        console.log(chalk.red(`  D ${file}`));
-                        break;
-                    case 'A':
-                        console.log(chalk.green(`  A ${file}`));
-                        break;
-                }
-            });
+                    switch (status) {
+                        case 'M':
+                            console.log(chalk.yellow(`${TAB + TAB}M ${file}`));
+                            break;
+                        case 'D':
+                            console.log(chalk.red(`${TAB + TAB}D ${file}`));
+                            break;
+                        case 'A':
+                            console.log(chalk.green(`${TAB + TAB}A ${file}`));
+                            break;
+                    }
+                });
+            }
         });
     });
 };
