@@ -30,6 +30,7 @@ interface Branch {
     name: string;
     commits: string[];
     remoteName?: string;
+    repositoryUrl?: string;
 }
 
 interface BranchCollection {
@@ -50,21 +51,36 @@ const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => 
     }));
 };
 
-const ensureBranchInfo = async (branchCollection: BranchCollection): Promise<BranchCollection> => {
+const ensureBranchInfo = async (
+    branchCollection: BranchCollection,
+    repositoryUrl: string,
+): Promise<BranchCollection> => {
     const branchNames = Object.keys(branchCollection);
     const remoteNames = await Promise.all(
         branchNames.map((branchName) => runCommand(`git config --get branch.${branchName}.merge`)),
     );
 
     branchNames.map((branchName, i) => {
-        branchCollection[branchName].remoteName = remoteNames[i];
+        const remoteBranchName = remoteNames[i].replace(/^refs\/heads\//gi, '').trim();
+
+        if (remoteBranchName) {
+            branchCollection[branchName].remoteName = remoteBranchName;
+            branchCollection[branchName].repositoryUrl = `${repositoryUrl}/tree/${remoteBranchName}`;
+        }
     });
 
     return branchCollection;
 };
 
+const getRepositoryUrl = async (): Promise<string> => {
+    const gitRepositoryUrl = await runCommand('git config --get remote.origin.url');
+
+    return gitRepositoryUrl.replace(/\.git/gi, '').trim();
+};
+
 const getLog = async (): Promise<void> => {
     const commits = await gitlogPromise(options);
+    const repositoryUrl = await getRepositoryUrl();
 
     const ensuredCommits = await ensureCommitsInfo(commits);
 
@@ -86,12 +102,14 @@ const getLog = async (): Promise<void> => {
         }
     });
 
-    await ensureBranchInfo(branches);
+    await ensureBranchInfo(branches, repositoryUrl);
 
     const branchNames = Object.keys(branches);
 
     branchNames.map((branchName) => {
-        console.log(chalk.magenta.bold(branchName));
+        console.log(
+            chalk.magenta.bold(branchName) + chalk.blue(` (${branches[branchName].repositoryUrl || 'local branch'})`),
+        );
 
         branches[branchName].commits.map((commitHash) => {
             const commit = commitCollection[commitHash];
