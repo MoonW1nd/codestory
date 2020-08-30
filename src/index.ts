@@ -3,9 +3,8 @@ import chalk from 'chalk';
 import clear from 'clear';
 import figlet from 'figlet';
 import yargs from 'yargs';
-import {spawn} from 'child_process';
 import {GitlogOptions, gitlogPromise} from 'gitlog';
-import {getBranchInfoFromNameRev, BranchInfo} from './helpers';
+import {getBranchInfoFromNameRev, BranchInfo, runCommand} from './helpers';
 
 clear();
 console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'})));
@@ -41,63 +40,21 @@ interface CommitCollection {
     [index: string]: Commit;
 }
 
-const addCommitBranchInfoP = (commit: GitLogCommit): Promise<Commit> => {
-    return new Promise((resolve, reject) => {
-        const revNameCommand = spawn('git', ['name-rev', commit.hash]);
-        let revNameResult = '';
-
-        revNameCommand.stdout.on('data', (data) => {
-            revNameResult += data.toString();
-        });
-
-        revNameCommand.on('error', (error) => {
-            console.log('error', error);
-            reject(error);
-        });
-
-        revNameCommand.on('close', (code) => {
-            resolve({
-                ...commit,
-                branchInfo: getBranchInfoFromNameRev(revNameResult),
-            });
-
-            return code;
-        });
-    });
-};
-
-const getRemoteBranchName = (branchName: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const revNameCommand = spawn('git', ['config', '--get', `branch.${branchName}.merge`]);
-        let revNameResult = '';
-
-        revNameCommand.stdout.on('data', (data) => {
-            revNameResult += data.toString();
-        });
-
-        revNameCommand.on('error', (error) => {
-            console.log('error', error);
-            reject(error);
-        });
-
-        revNameCommand.on('close', (code) => {
-            console.log(revNameResult);
-            resolve(revNameResult);
-
-            return code;
-        });
-    });
-};
-
 const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
-    const commitsP = commits.map(addCommitBranchInfoP);
+    const nameRevsP = commits.map((commit) => runCommand(`git name-rev ${commit.hash}`));
+    const nameRevs = await Promise.all(nameRevsP);
 
-    return await Promise.all(commitsP);
+    return commits.map((commit, i) => ({
+        ...commit,
+        branchInfo: getBranchInfoFromNameRev(nameRevs[i]),
+    }));
 };
 
 const ensureBranchInfo = async (branchCollection: BranchCollection): Promise<BranchCollection> => {
     const branchNames = Object.keys(branchCollection);
-    const remoteNames = await Promise.all(branchNames.map(getRemoteBranchName));
+    const remoteNames = await Promise.all(
+        branchNames.map((branchName) => runCommand(`git config --get branch.${branchName}.merge`)),
+    );
 
     branchNames.map((branchName, i) => {
         branchCollection[branchName].remoteName = remoteNames[i];

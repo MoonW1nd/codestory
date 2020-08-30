@@ -3,7 +3,7 @@ import {spawn, SpawnOptionsWithoutStdio} from 'child_process';
 /**
  * Run command with text output in terminal
  */
-export const runCommand = (command: string, options: SpawnOptionsWithoutStdio | undefined): Promise<string> => {
+export const runCommand = (command: string, options?: SpawnOptionsWithoutStdio): Promise<string> => {
     const [commandName, ...args] = command.split(' ');
 
     return new Promise((resolve, reject) => {
