@@ -27,8 +27,14 @@ const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
 type GitLogCommit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
 type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
-interface BranchesMap {
-    [index: string]: string[];
+interface Branch {
+    name: string;
+    commits: string[];
+    remoteName?: string;
+}
+
+interface BranchCollection {
+    [index: string]: Branch;
 }
 
 interface CommitCollection {
@@ -60,10 +66,44 @@ const addCommitBranchInfoP = (commit: GitLogCommit): Promise<Commit> => {
     });
 };
 
+const getRemoteBranchName = (branchName: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const revNameCommand = spawn('git', ['config', '--get', `branch.${branchName}.merge`]);
+        let revNameResult = '';
+
+        revNameCommand.stdout.on('data', (data) => {
+            revNameResult += data.toString();
+        });
+
+        revNameCommand.on('error', (error) => {
+            console.log('error', error);
+            reject(error);
+        });
+
+        revNameCommand.on('close', (code) => {
+            console.log(revNameResult);
+            resolve(revNameResult);
+
+            return code;
+        });
+    });
+};
+
 const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
     const commitsP = commits.map(addCommitBranchInfoP);
 
     return await Promise.all(commitsP);
+};
+
+const ensureBranchInfo = async (branchCollection: BranchCollection): Promise<BranchCollection> => {
+    const branchNames = Object.keys(branchCollection);
+    const remoteNames = await Promise.all(branchNames.map(getRemoteBranchName));
+
+    branchNames.map((branchName, i) => {
+        branchCollection[branchName].remoteName = remoteNames[i];
+    });
+
+    return branchCollection;
 };
 
 const getLog = async (): Promise<void> => {
@@ -71,7 +111,7 @@ const getLog = async (): Promise<void> => {
 
     const ensuredCommits = await ensureCommitsInfo(commits);
 
-    const branches: BranchesMap = {};
+    const branches: BranchCollection = {};
     const commitCollection: CommitCollection = {};
 
     ensuredCommits.forEach((commit) => {
@@ -80,16 +120,23 @@ const getLog = async (): Promise<void> => {
         commitCollection[commit.hash] = commit;
 
         if (branches[branchName] !== undefined) {
-            branches[branchName].push(commit.hash);
+            branches[branchName].commits.push(commit.hash);
         } else {
-            branches[branchName] = [commit.hash];
+            branches[branchName] = {
+                name: branchName,
+                commits: [commit.hash],
+            };
         }
     });
 
-    Object.keys(branches).map((branchName) => {
+    await ensureBranchInfo(branches);
+
+    const branchNames = Object.keys(branches);
+
+    branchNames.map((branchName) => {
         console.log(chalk.magenta.bold(branchName));
 
-        branches[branchName].map((commitHash) => {
+        branches[branchName].commits.map((commitHash) => {
             const commit = commitCollection[commitHash];
 
             console.log(`${chalk.dim.white(commit.authorDate.split(' ')[0])} ${chalk.bold.white(commit.subject)}`);
