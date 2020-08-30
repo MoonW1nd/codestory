@@ -27,6 +27,14 @@ const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
 type GitLogCommit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
 type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
+interface BranchesMap {
+    [index: string]: string[];
+}
+
+interface CommitCollection {
+    [index: string]: Commit;
+}
+
 const addCommitBranchInfoP = (commit: GitLogCommit): Promise<Commit> => {
     return new Promise((resolve, reject) => {
         const revNameCommand = spawn('git', ['name-rev', commit.hash]);
@@ -63,7 +71,46 @@ const getLog = async (): Promise<void> => {
 
     const ensuredCommits = await ensureCommitsInfo(commits);
 
-    console.log(ensuredCommits);
+    const branches: BranchesMap = {};
+    const commitCollection: CommitCollection = {};
+
+    ensuredCommits.forEach((commit) => {
+        const branchName = commit.branchInfo.name;
+
+        commitCollection[commit.hash] = commit;
+
+        if (branches[branchName] !== undefined) {
+            branches[branchName].push(commit.hash);
+        } else {
+            branches[branchName] = [commit.hash];
+        }
+    });
+
+    Object.keys(branches).map((branchName) => {
+        console.log(chalk.magenta.bold(branchName));
+
+        branches[branchName].map((commitHash) => {
+            const commit = commitCollection[commitHash];
+
+            console.log(`${chalk.dim.white(commit.authorDate.split(' ')[0])} ${chalk.bold.white(commit.subject)}`);
+
+            commit.files.map((file, i) => {
+                const status = commit.status[i];
+
+                switch (status) {
+                    case 'M':
+                        console.log(chalk.yellow(`  M ${file}`));
+                        break;
+                    case 'D':
+                        console.log(chalk.red(`  D ${file}`));
+                        break;
+                    case 'A':
+                        console.log(chalk.green(`  A ${file}`));
+                        break;
+                }
+            });
+        });
+    });
 };
 
 getLog();
