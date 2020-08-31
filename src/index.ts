@@ -90,7 +90,8 @@ const getRepositoryUrl = async (): Promise<string> => {
 
 const getLog = async (): Promise<void> => {
     if (!options.author) {
-        options.author = await runCommand(`git config --get user.name`);
+        const author = await runCommand(`git config --get user.name`);
+        options.author = author.trim();
     }
 
     const commits = await gitlogPromise(options);
