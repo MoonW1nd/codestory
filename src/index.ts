@@ -12,12 +12,18 @@ console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'}))
 const argv = yargs.options({
     since: {type: 'string'},
     trackerUrl: {type: 'string'},
+    author: {type: 'string'},
     showFiles: {type: 'boolean'},
 }).argv;
 
+const TAB = '    ';
+const TICKET_NAME_REGEXP = /[A-Z]{1,}-\d{1,}/g;
+const TRACKER_URL = argv.trackerUrl;
+const SHOW_FILES = argv.showFiles;
+
 const options: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
     repo: process.cwd(),
-    author: 'Alexander Ivankov',
+    author: argv.author,
     number: 50,
     fields: ['authorDate', 'subject', 'hash'],
     execOptions: {maxBuffer: 1000 * 1024},
@@ -42,11 +48,6 @@ interface BranchCollection {
 interface CommitCollection {
     [index: string]: Commit;
 }
-
-const TICKET_NAME_REGEXP = /[A-Z]{1,}-\d{1,}/g;
-const TRACKER_URL = argv.trackerUrl;
-const SHOW_FILES = argv.showFiles;
-const TAB = '    ';
 
 const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
     const nameRevsP = commits.map((commit) => runCommand(`git name-rev ${commit.hash}`));
@@ -88,6 +89,11 @@ const getRepositoryUrl = async (): Promise<string> => {
 };
 
 const getLog = async (): Promise<void> => {
+    if (!options.author) {
+        const author = await runCommand(`git config --get user.name`);
+        options.author = author.trim();
+    }
+
     const commits = await gitlogPromise(options);
     const repositoryUrl = await getRepositoryUrl();
 
