@@ -2,14 +2,16 @@
     "name": "code-story",
     "version": "0.0.1",
     "description": "Tool for parse git reflog",
-    "main": "./lib/index.js",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "bin": {
-        "cstory": "./lib/index.js"
+        "cs": "./lib/index.js"
     },
     "scripts": {
         "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
         "create": "npm run build && npm run test",
-        "build": "rm -rf ./lib && tsc -p .",
+        "prepare": "npm run build",
+        "build": "tsc -p .",
         "test": "echo \"Error: no test specified\" && exit 1",
         "test:local": "sudo npm i -g && cstory",
         "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
@@ -52,5 +54,6 @@
         "standard-version": "^8.0.1",
         "ts-node": "^8.10.2",
         "typescript": "^3.9.6"
-    }
+    },
+    "files": ["lib/**/*"]
 }
