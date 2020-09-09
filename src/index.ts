@@ -29,17 +29,19 @@ const options = {
     ...argv,
 };
 
-const gitLogOptions: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
+type GitLogFields = 'authorDate' | 'subject' | 'hash' | 'abbrevHash';
+
+const gitLogOptions: GitlogOptions<GitLogFields> = {
     repo: process.cwd(),
     author: options.author,
     number: 999,
-    fields: ['authorDate', 'subject', 'hash'],
+    fields: ['authorDate', 'subject', 'hash', 'abbrevHash'],
     execOptions: {maxBuffer: 1000 * 1024},
     since: options.since || DEFAULT_SINCE_PARAMS,
     all: true,
 };
 
-type GitLogCommit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
+type GitLogCommit = Record<GitLogFields | 'status', string> & {files: string[]};
 type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
 interface Branch {
