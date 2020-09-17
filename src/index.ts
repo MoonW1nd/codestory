@@ -4,9 +4,19 @@ import clear from 'clear';
 import figlet from 'figlet';
 import yargs from 'yargs';
 import {cosmiconfigSync} from 'cosmiconfig';
-import {GitlogOptions, gitlogPromise} from 'gitlog';
-import {getBranchInfoFromNameRev, BranchInfo, runCommand, renderLineWithTitle, chalkUrl} from './helpers';
+import {gitlogPromise} from 'gitlog';
+
 import {TICKET_NAME_REGEXP, TAB, DEFAULT_SINCE_PARAMS} from './constants';
+import {GitLogCommit, GitlogOptions} from './types/gitlog';
+import {
+    BranchInfo,
+    runCommand,
+    renderLineWithTitle,
+    chalkUrl,
+    getRepositoryUrl,
+    getBranchInfoByCommitHash,
+    getUserName,
+} from './helpers';
 
 clear();
 
@@ -29,17 +39,16 @@ const options = {
     ...argv,
 };
 
-const gitLogOptions: GitlogOptions<'authorDate' | 'subject' | 'hash'> = {
+const gitLogOptions: GitlogOptions = {
     repo: process.cwd(),
     author: options.author,
     number: 999,
-    fields: ['authorDate', 'subject', 'hash'],
+    fields: ['authorDate', 'subject', 'hash', 'abbrevHash'],
     execOptions: {maxBuffer: 1000 * 1024},
     since: options.since || DEFAULT_SINCE_PARAMS,
     all: true,
 };
 
-type GitLogCommit = Record<'authorDate' | 'subject' | 'hash' | 'status', string> & {files: string[]};
 type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
 interface Branch {
@@ -57,13 +66,13 @@ interface CommitCollection {
     [index: string]: Commit;
 }
 
-const ensureCommitsInfo = async (commits: GitLogCommit[]): Promise<Commit[]> => {
-    const nameRevsP = commits.map((commit) => runCommand(`git name-rev ${commit.hash}`));
+const ensureCommitsInfo = async (commits: GitLogCommit[], options: GitlogOptions): Promise<Commit[]> => {
+    const nameRevsP = commits.map((commit) => getBranchInfoByCommitHash(commit.hash, options));
     const nameRevs = await Promise.all(nameRevsP);
 
     return commits.map((commit, i) => ({
         ...commit,
-        branchInfo: getBranchInfoFromNameRev(nameRevs[i]),
+        branchInfo: nameRevs[i],
     }));
 };
 
@@ -90,24 +99,17 @@ const ensureBranchInfo = async (
     return branchCollection;
 };
 
-const getRepositoryUrl = async (): Promise<string> => {
-    const gitRepositoryUrl = await runCommand('git config --get remote.origin.url');
-
-    return gitRepositoryUrl.replace(/\.git/gi, '').trim();
-};
-
 const getLog = async (): Promise<void> => {
     const {author, trackerUrl, showFiles} = options;
 
     if (!author) {
-        const author = await runCommand(`git config --get user.name`);
-        gitLogOptions.author = author.trim();
+        gitLogOptions.author = await getUserName();
     }
 
     const commits = await gitlogPromise(gitLogOptions);
     const repositoryUrl = await getRepositoryUrl();
 
-    const ensuredCommits = await ensureCommitsInfo(commits);
+    const ensuredCommits = await ensureCommitsInfo(commits, gitLogOptions);
 
     const branches: BranchCollection = {};
     const commitCollection: CommitCollection = {};
