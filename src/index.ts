@@ -4,9 +4,19 @@ import clear from 'clear';
 import figlet from 'figlet';
 import yargs from 'yargs';
 import {cosmiconfigSync} from 'cosmiconfig';
-import {GitlogOptions as GitlogOptionsBase, gitlogPromise} from 'gitlog';
-import {BranchInfo, runCommand, renderLineWithTitle, chalkUrl, getBranchInfoByCommitHash} from './helpers';
+import {gitlogPromise} from 'gitlog';
+
 import {TICKET_NAME_REGEXP, TAB, DEFAULT_SINCE_PARAMS} from './constants';
+import {GitLogCommit, GitlogOptions} from './types/gitlog';
+import {
+    BranchInfo,
+    runCommand,
+    renderLineWithTitle,
+    chalkUrl,
+    getRepositoryUrl,
+    getBranchInfoByCommitHash,
+    getUserName,
+} from './helpers';
 
 clear();
 
@@ -29,10 +39,6 @@ const options = {
     ...argv,
 };
 
-type GitLogFields = 'authorDate' | 'subject' | 'hash' | 'abbrevHash';
-
-export type GitlogOptions = GitlogOptionsBase<GitLogFields>;
-
 const gitLogOptions: GitlogOptions = {
     repo: process.cwd(),
     author: options.author,
@@ -43,7 +49,6 @@ const gitLogOptions: GitlogOptions = {
     all: true,
 };
 
-type GitLogCommit = Record<GitLogFields | 'status', string> & {files: string[]};
 type Commit = GitLogCommit & {branchInfo: BranchInfo};
 
 interface Branch {
@@ -94,18 +99,11 @@ const ensureBranchInfo = async (
     return branchCollection;
 };
 
-const getRepositoryUrl = async (): Promise<string> => {
-    const gitRepositoryUrl = await runCommand('git config --get remote.origin.url');
-
-    return gitRepositoryUrl.replace(/\.git/gi, '').trim();
-};
-
 const getLog = async (): Promise<void> => {
     const {author, trackerUrl, showFiles} = options;
 
     if (!author) {
-        const author = await runCommand(`git config --get user.name`);
-        gitLogOptions.author = author.trim();
+        gitLogOptions.author = await getUserName();
     }
 
     const commits = await gitlogPromise(gitLogOptions);
