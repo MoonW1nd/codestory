@@ -1,10 +1,11 @@
 import {gitlogPromise} from 'gitlog';
-import {BranchCollection, CommitCollection} from '@project-types/entities';
+
 import {getRepositoryUrl} from 'src/helpers';
+import {BranchCollection, CommitCollection} from '@project-types/entities';
+import {Options} from '@project-types/options';
 
 import ensureCommits from './helpers/ensureCommits';
 import ensureBranchesCollection from './helpers/ensureBranchesCollection';
-import {GitlogOptions} from '@project-types/gitlog';
 
 interface ResolveGitDataResult {
     commits: CommitCollection;
@@ -12,7 +13,7 @@ interface ResolveGitDataResult {
     repositoryUrl: string;
 }
 
-const resolveGitData = async (options: GitlogOptions): Promise<ResolveGitDataResult> => {
+const resolveGitData = async (options: Options): Promise<ResolveGitDataResult> => {
     const repositoryUrl = await getRepositoryUrl();
     const commits = await gitlogPromise(options);
     const ensuredCommits = await ensureCommits(commits, options);

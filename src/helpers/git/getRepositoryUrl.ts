@@ -1,5 +1,6 @@
+import {Url} from '@project-types/aliases';
+
 import {runCommand} from '../runCommand';
-import {Url} from '../../types/main';
 
 /**
  * Получение url текущего репозитория
