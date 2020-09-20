@@ -14,6 +14,7 @@ interface ResolveGitDataResult {
 }
 
 const resolveGitData = async (options: Options): Promise<ResolveGitDataResult> => {
+    console.log(options);
     const repositoryUrl = await getRepositoryUrl();
     const commits = await gitlogPromise(options);
     const ensuredCommits = await ensureCommits(commits, options);
@@ -22,15 +23,16 @@ const resolveGitData = async (options: Options): Promise<ResolveGitDataResult> =
     const commitCollection: CommitCollection = {};
 
     ensuredCommits.forEach((commit) => {
-        const {branchName} = commit;
+        const {name, refType} = commit.branchInfo;
 
         commitCollection[commit.hash] = commit;
 
-        if (branchesCollection[branchName] !== undefined) {
-            branchesCollection[branchName].commits.push(commit.hash);
+        if (branchesCollection[name] !== undefined) {
+            branchesCollection[name].commits.push(commit.hash);
         } else {
-            branchesCollection[branchName] = {
-                id: branchName,
+            branchesCollection[name] = {
+                id: name,
+                refType,
                 commits: [commit.hash],
             };
         }

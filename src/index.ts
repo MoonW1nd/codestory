@@ -13,13 +13,17 @@ import {renderLineWithTitle, chalkUrl} from './helpers';
 import resolveGitData from './services/resolveGitData';
 import {resolveOptions} from 'src/services';
 
-clear();
-
 const getLog = async (): Promise<void> => {
     const options = await resolveOptions();
-    const {trackerUrl, showCommitFiles} = options;
+    const {trackerUrl, showCommitFiles, clearConsole} = options;
+
+    if (clearConsole) {
+        clear();
+    }
 
     const {commits, branches} = await resolveGitData(options);
+
+    console.log(commits, branches);
 
     console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'})));
 
@@ -31,9 +35,11 @@ const getLog = async (): Promise<void> => {
 
         console.log(chalk.magenta.bold(branchName));
 
-        const prUrl = chalkUrl(branches[branchName].repositoryUrl || 'local branch');
+        const prUrl = branches[branchName].repositoryUrl;
 
-        renderLineWithTitle('pr', prUrl);
+        if (prUrl) {
+            renderLineWithTitle('pr', chalkUrl(prUrl));
+        }
 
         const [ticketName] = branchName.match(TICKET_NAME_REGEXP) || [];
 

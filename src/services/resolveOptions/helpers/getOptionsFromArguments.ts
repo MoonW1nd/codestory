@@ -36,7 +36,6 @@ const getOptionsFromArguments = (): UserOptions => {
             author: {
                 type: 'string',
                 describe: 'Limit the commits output to ones with author header lines that match the specified pattern.',
-                default: 'Author param from git config',
             },
             branch: {
                 type: 'string',
@@ -68,7 +67,7 @@ const getOptionsFromArguments = (): UserOptions => {
                 type: 'boolean',
                 alias: 'cs',
                 describe: 'Clear console before out info',
-                default: true,
+                default: false,
             },
         })
         .help('h')
