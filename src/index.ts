@@ -23,8 +23,6 @@ const getLog = async (): Promise<void> => {
 
     const {commits, branches} = await resolveGitData(options);
 
-    console.log(commits, branches);
-
     console.log(chalk.red(figlet.textSync('code story', {horizontalLayout: 'full'})));
 
     const branchNames = Object.keys(branches);
@@ -35,10 +33,16 @@ const getLog = async (): Promise<void> => {
 
         console.log(chalk.magenta.bold(branchName));
 
-        const prUrl = branches[branchName].repositoryUrl;
+        const {repositoryUrl, refType} = branches[branchName];
 
-        if (prUrl) {
-            renderLineWithTitle('pr', chalkUrl(prUrl));
+        if (repositoryUrl) {
+            if (branchName === 'master') {
+                renderLineWithTitle('branch', chalkUrl(repositoryUrl));
+            } else if (refType === 'tag') {
+                renderLineWithTitle('tag', chalkUrl(repositoryUrl));
+            } else {
+                renderLineWithTitle('pr', chalkUrl(repositoryUrl));
+            }
         }
 
         const [ticketName] = branchName.match(TICKET_NAME_REGEXP) || [];

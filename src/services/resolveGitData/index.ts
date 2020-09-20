@@ -14,7 +14,6 @@ interface ResolveGitDataResult {
 }
 
 const resolveGitData = async (options: Options): Promise<ResolveGitDataResult> => {
-    console.log(options);
     const repositoryUrl = await getRepositoryUrl();
     const commits = await gitlogPromise(options);
     const ensuredCommits = await ensureCommits(commits, options);

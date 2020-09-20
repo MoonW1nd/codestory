@@ -1,13 +1,36 @@
-import {BranchCollection} from '@project-types/entities';
+import {Url} from '@project-types/aliases';
+import {BranchCollection, BranchRefType} from '@project-types/entities';
 import {runCommand} from 'src/helpers';
+
+interface ConstructRepositoryUrlParams {
+    branchName: string;
+    repositoryUrl: Url;
+    remoteBranchName: string;
+    refType?: BranchRefType;
+}
+
+const constructRepositoryUrl = ({
+    repositoryUrl,
+    branchName,
+    remoteBranchName,
+    refType,
+}: ConstructRepositoryUrlParams): Url => {
+    let middlePath: string;
+    if (branchName === 'master' || refType === 'tag') {
+        middlePath = 'tree';
+    } else {
+        middlePath = 'pull';
+    }
+
+    return `${repositoryUrl}/${middlePath}/${remoteBranchName}`;
+};
 
 /**
  *  Ensure info about branch entity: remoteBranchName, repositoryUrl;
  */
-
 const ensureBranchesCollection = async (
     branchCollection: BranchCollection,
-    repositoryUrl: string,
+    repositoryUrl: Url,
 ): Promise<BranchCollection> => {
     const branchNames = Object.keys(branchCollection);
     const remoteNames = await Promise.all(
@@ -15,13 +38,17 @@ const ensureBranchesCollection = async (
     );
 
     branchNames.map((branchName, i) => {
-        const remoteBranchName = remoteNames[i].replace(/^refs\/heads\//gi, '').trim();
+        const {refType} = branchCollection[branchName];
+        const remoteBranchName = refType === 'tag' ? branchName : remoteNames[i].replace(/^refs\/heads\//gi, '').trim();
 
         if (remoteBranchName) {
             branchCollection[branchName].remoteName = remoteBranchName;
-            branchCollection[branchName].repositoryUrl = `${repositoryUrl}/${
-                branchName === 'master' ? 'tree' : 'pull'
-            }/${remoteBranchName}`;
+            branchCollection[branchName].repositoryUrl = constructRepositoryUrl({
+                remoteBranchName,
+                branchName,
+                repositoryUrl,
+                refType,
+            });
         }
     });
 
