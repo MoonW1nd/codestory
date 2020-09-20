@@ -1,6 +1,7 @@
 import {Options} from '@project-types/options';
 import {BranchRefType, BranchInfo} from '@project-types/entities';
 import {LINE_BREAK_CHAR} from 'src/constants';
+import getDateRangeGitLogOptions from 'src/helpers/git/getDateRangeGitLogOptions';
 
 import {runCommand} from '../runCommand';
 
@@ -8,7 +9,9 @@ import {runCommand} from '../runCommand';
  * Get breach name from source by commit hash
  */
 const getBranchInfoByCommitHash = async (commitHash: string, options: Options): Promise<BranchInfo> => {
-    const commitReflog = await runCommand(`git log --source --all --pretty=oneline --since=${options.since}`);
+    const commitReflog = await runCommand(
+        `git log --source --all --pretty=oneline ${getDateRangeGitLogOptions(options)}`,
+    );
     const reflogRecords = commitReflog.split(LINE_BREAK_CHAR);
 
     const [logRecord] = reflogRecords.filter((reflogRecord) => reflogRecord.indexOf(commitHash) === 0);
