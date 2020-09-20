@@ -20,6 +20,8 @@ Opinionated git log parser for help on stand up activities.
  - show change files in commits
  - support config files
 
+![preview](doc/images/preview.png)
+
 ## Installation
 
 ```shell
@@ -27,21 +29,21 @@ npm i -g code-story
 ```
 
 ## Options
-| flag                | alias  | description                                                                                 | type      | default          |
-|---------------------|--------|---------------------------------------------------------------------------------------------|-----------|------------------|
-| `--since`           | `-s`   | Show commits more recent than a specific date.                                              | string  |                  |
-| `--after`           | `-a`   | Show commits more recent than a specific date.                                              | string  |                  |
-| `--until`           | `-u`   | Show commits older than a specific date.                                                    | string  |                  |
-| `--before`          | `-b`   | Show commits older than a specific date.                                                    | string  |                  |
-| `--trackerUrl`      | `-t`   | Base url in task tracker system.                                                            | string  |                  |
-| `--author`          |        | Limit the commits output to ones with author header lines that match the specified pattern. | string  |                  |
-| `--branch`          | `-b`   | Show only commits in the specified branch or revision range.                                | string  |                  |
-| `--number`          | `-n`   | The number of commits to return                                                             | number  |  999   |
-| `--file`            | `-f`   | File filter for the git log command                                                         | string  |                  |
-| `--committer`       |        | Limit the commits output to ones with author header lines that match the specified pattern. | string  |                  |
-| `--showCommitFiles` | `--sf` | Show files changed in commits.                                                              | boolean |  false |
-| `--clearConsole`    | `--cs` | Clear console before out info                                                               | boolean |  false |
-| `--help`            | `-h`   | Show help                                                                                   | boolean |                  |
+| flag                | alias  | description                                                                                 | type    | default |
+|---------------------|--------|---------------------------------------------------------------------------------------------|---------|---------|
+| `--since`           | `-s`   | Show commits more recent than a specific date.                                              | string  |         |
+| `--after`           | `-a`   | Show commits more recent than a specific date.                                              | string  |         |
+| `--until`           | `-u`   | Show commits older than a specific date.                                                    | string  |         |
+| `--before`          | `-b`   | Show commits older than a specific date.                                                    | string  |         |
+| `--trackerUrl`      | `-t`   | Base url in task tracker system.                                                            | string  |         |
+| `--author`          |        | Limit the commits output to ones with author header lines that match the specified pattern. | string  |         |
+| `--branch`          | `-b`   | Show only commits in the specified branch or revision range.                                | string  |         |
+| `--number`          | `-n`   | The number of commits to return                                                             | number  | 999     |
+| `--file`            | `-f`   | File filter for the git log command                                                         | string  |         |
+| `--committer`       |        | Limit the commits output to ones with author header lines that match the specified pattern. | string  |         |
+| `--showCommitFiles` | `--sf` | Show files changed in commits.                                                              | boolean | false   |
+| `--clearConsole`    | `--cs` | Clear console before out info                                                               | boolean | false   |
+| `--help`            | `-h`   | Show help                                                                                   | boolean |         |
  
 ### Config files
 
