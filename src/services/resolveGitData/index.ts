@@ -1,10 +1,11 @@
 import {gitlogPromise} from 'gitlog';
-import {BranchCollection, CommitCollection} from '@project-types/entities';
+
 import {getRepositoryUrl} from 'src/helpers';
+import {BranchCollection, CommitCollection} from '@project-types/entities';
+import {Options} from '@project-types/options';
 
 import ensureCommits from './helpers/ensureCommits';
 import ensureBranchesCollection from './helpers/ensureBranchesCollection';
-import {GitlogOptions} from '@project-types/gitlog';
 
 interface ResolveGitDataResult {
     commits: CommitCollection;
@@ -12,7 +13,7 @@ interface ResolveGitDataResult {
     repositoryUrl: string;
 }
 
-const resolveGitData = async (options: GitlogOptions): Promise<ResolveGitDataResult> => {
+const resolveGitData = async (options: Options): Promise<ResolveGitDataResult> => {
     const repositoryUrl = await getRepositoryUrl();
     const commits = await gitlogPromise(options);
     const ensuredCommits = await ensureCommits(commits, options);
@@ -21,15 +22,16 @@ const resolveGitData = async (options: GitlogOptions): Promise<ResolveGitDataRes
     const commitCollection: CommitCollection = {};
 
     ensuredCommits.forEach((commit) => {
-        const {branchName} = commit;
+        const {name, refType} = commit.branchInfo;
 
         commitCollection[commit.hash] = commit;
 
-        if (branchesCollection[branchName] !== undefined) {
-            branchesCollection[branchName].commits.push(commit.hash);
+        if (branchesCollection[name] !== undefined) {
+            branchesCollection[name].commits.push(commit.hash);
         } else {
-            branchesCollection[branchName] = {
-                id: branchName,
+            branchesCollection[name] = {
+                id: name,
+                refType,
                 commits: [commit.hash],
             };
         }
