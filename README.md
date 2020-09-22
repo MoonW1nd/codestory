@@ -2,7 +2,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Conventional Commits][conventional-commits-image]][conventional-commits-url]
 
-  > ⚠️ This is beta version
+  > ⚠️ **This is beta version**
 
 ## Description 
 Opinionated git log parser shows which code you worked on in the specified period, providing additional useful information.
@@ -18,7 +18,7 @@ Opinionated git log parser shows which code you worked on in the specified perio
 ```shell
 feature/CODESTORY-1-documentation  ───────────────────────────────────────── branch name
 PR: https://github.com/MoonW1nd/codestory/pull/feature/CODESTORY-1-doc  ──── link on PR
-TASK: https://st.yandex-team.ru/CODESTORY-1  ─────────────────────────────── task tracker link
+TASK: https://tracker.yandex.ru/CODESTORY-1  ─────────────────────────────── task tracker link
 COMMITS:  ┌───────────────────────────────────────────────────────────────── commit date
     2020-09-21 feat(readme.md): start documentation  ─────────────────────── commit title
         A README.md  ─────────────────────────────────────────────────────── changed file
