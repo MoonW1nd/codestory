@@ -20,7 +20,16 @@ Opinionated git log parser for help on stand up activities.
  - show change files in commits
  - support config files
 
-![preview](doc/images/preview.png)
+**Output example:**
+```shell
+feature/CODESTORY-1-documentation  ───────────────────────────────────────── branch name
+PR: https://github.com/MoonW1nd/codestory/pull/feature/CODESTORY-1-doc  ──── link on PR
+TASK: https://st.yandex-team.ru/CODESTORY-1  ─────────────────────────────── task tracker link
+COMMITS:  ┌───────────────────────────────────────────────────────────────── commit date
+    2020-09-21 feat(readme.md): start documentation  ─────────────────────── commit title
+        A README.md  ─────────────────────────────────────────────────────── changed file
+        └─────────────────────────────────────────────────────────────────── modification type
+```
 
 ## Installation
 
