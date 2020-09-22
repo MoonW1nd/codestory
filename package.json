@@ -5,7 +5,7 @@
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "bin": {
-        "codestory": "./lib/index.js"
+        "code-story": "./lib/index.js"
     },
     "scripts": {
         "start": "node ./lib/index.js",
