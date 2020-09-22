@@ -1,24 +1,18 @@
-```
-                     _                  _                                     _   _
-   ___    ___     __| |   ___     ___  | |_    ___    _ __   _   _      ___  | | (_)
-  / __|  / _ \   / _` |  / _ \   / __| | __|  / _ \  | '__| | | | |    / __| | | | |
- | (__  | (_) | | (_| | |  __/   \__ \ | |_  | (_) | | |    | |_| |   | (__  | | | |
-  \___|  \___/   \__,_|  \___|   |___/  \__|  \___/  |_|     \__, |    \___| |_| |_|
-                                                             |___/
-```
-
+# code story cli
 [![NPM version][npm-image]][npm-url]
 [![Conventional Commits][conventional-commits-image]][conventional-commits-url]
 
+  > ⚠️ This is beta version
+
 ## Description 
-Opinionated git log parser for help on stand up activities.
+Opinionated git log parser shows which code you worked on in the specified period, providing additional useful information.
 
 **Features:**
  - group commit by branch
- - show link on task in task tracker
+ - show link on task tracker
  - show link on PR, branch or tag
- - show change files in commits
- - support config files
+ - show changed files in commits
+ - support config file
 
 **Output example:**
 ```shell
@@ -54,9 +48,9 @@ npm i -g code-story
 | `--clearConsole`    | `--cs` | Clear console before out info                                                               | boolean | false   |
 | `--help`            | `-h`   | Show help                                                                                   | boolean |         |
  
-### Config files
+## Config file
 
-Support set often use options in:
+Support set often used options in:
 - `codestory` property in a package.json
 - a JSON or YAML, extensionless `.codestoryrc` file
 - an `.codestoryrc` with the extensions .json, .yaml, .yml, .js, or .cjs (example: `.codestoryrc.json`)
@@ -68,6 +62,11 @@ Get commits story by last week
 ```shell
 code-story --since=1.week.ago
 ```
+
+## Known issues
+ - rebased commits detected as changed ([#14](https://github.com/MoonW1nd/codestory/issues/14))
+ - wrong detect branch name in branch without commits ([#4](https://github.com/MoonW1nd/codestory/issues/4))
+
 
 [npm-url]: https://www.npmjs.com/package/code-story
 [npm-image]: https://img.shields.io/npm/v/code-story.svg
