@@ -1,7 +1,5 @@
-import chalk from 'chalk';
+import chalk, {ChalkFunction} from 'chalk';
 import {TAB} from 'src/constants';
-
-type ChalkFunction = typeof chalk.cyan;
 
 type RenderParams = {
     chalk?: ChalkFunction;

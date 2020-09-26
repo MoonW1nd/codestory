@@ -1,7 +1,7 @@
-import {blue, cyan, magenta, dim, white, red, yellow, green} from 'chalk';
+import {blue, cyan, magenta, dim, white, red, yellow, green, ChalkFunction} from 'chalk';
 import {TextEntity} from 'src/constants';
 
-const COLOR_MAP: Record<keyof typeof TextEntity, typeof blue> = {
+const COLOR_MAP: Record<keyof typeof TextEntity, ChalkFunction> = {
     [TextEntity.url]: blue,
     [TextEntity.label]: cyan,
     [TextEntity.branch]: magenta.bold,
