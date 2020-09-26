@@ -8,6 +8,7 @@ export const TICKET_NAME_REGEXP = /[A-Z]{1,}-\d{1,}/g;
 
 export enum TextEntity {
     url = 'url',
+    nope = 'nope',
     label = 'label',
     branch = 'branch',
     commitHash = 'commitHash',

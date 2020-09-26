@@ -4,7 +4,7 @@ import {TextEntity} from 'src/constants';
 const COLOR_MAP: Record<keyof typeof TextEntity, typeof blue> = {
     [TextEntity.url]: blue,
     [TextEntity.label]: cyan,
-    [TextEntity.branch]: magenta,
+    [TextEntity.branch]: magenta.bold,
     [TextEntity.date]: dim,
     [TextEntity.commitSubject]: white,
     [TextEntity.addedFile]: green,
@@ -17,6 +17,7 @@ const COLOR_MAP: Record<keyof typeof TextEntity, typeof blue> = {
     [TextEntity.author]: dim,
     [TextEntity.commitHash]: red,
     [TextEntity.rebasedFile]: dim,
+    [TextEntity.nope]: white,
 };
 
 const chalkTextEntity = (entity: TextEntity, text: string): string => COLOR_MAP[entity](text);
