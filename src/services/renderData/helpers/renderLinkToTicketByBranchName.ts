@@ -9,7 +9,7 @@ const renderLinkToTicketByBranchName = (branchName: string, {trackerUrl}: Option
     if (trackerUrl && ticketName) {
         const ticketUrl = chalkTextEntity(TextEntity.url, `${trackerUrl}/${ticketName}`);
 
-        renderLineWithLabel(ticketUrl);
+        renderLineWithLabel('task', ticketUrl);
     }
 };
 
