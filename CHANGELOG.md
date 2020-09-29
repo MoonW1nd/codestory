@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/MoonW1nd/codestory/compare/v0.2.2...v0.2.3) (2020-09-29)
+
+
+### Bug Fixes
+
+* **render:** bug with bad rander link on task ([2a50f26](https://github.com/MoonW1nd/codestory/commit/2a50f262247aaf0bda78122cb05f6f0c3dc8dbef))
+
 ### [0.2.2](https://github.com/MoonW1nd/codestory/compare/v0.2.1...v0.2.2) (2020-09-26)
 
 
