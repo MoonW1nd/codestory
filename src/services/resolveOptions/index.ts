@@ -10,6 +10,7 @@ const gitLogSystemOptons: GitlogOptions = {
     repo: process.cwd(),
     fields: ['authorDate', 'subject', 'hash', 'abbrevHash'],
     execOptions: {maxBuffer: 1000 * 1024},
+    all: true,
 };
 
 const defaultOptions: UserOptions = {
