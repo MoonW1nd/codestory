@@ -11,6 +11,10 @@ const renderCommitInfo = (commit: Commit, options?: Options): void => {
     const renderText = `${chalkedDate} ${chalkedSubject}`;
 
     render(renderText, {indent: 1});
+
+    if (commit.reflog.some(({action}) => action.indexOf('rebase') !== -1)) {
+        render(`${commit.reflog.map(({action}) => action).concat()}`, {indent: 2});
+    }
 };
 
 export default renderCommitInfo;
