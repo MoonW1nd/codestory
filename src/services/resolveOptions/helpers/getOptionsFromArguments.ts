@@ -1,6 +1,8 @@
 import yargs from 'yargs';
 
-import {UserOptions} from '@project-types/options';
+import {UserOptions, CliTitle} from '@project-types/options';
+
+const titles: ReadonlyArray<CliTitle> = ['full', 'minimal', 'off'];
 
 const getOptionsFromArguments = (): UserOptions => {
     return yargs
@@ -59,17 +61,14 @@ const getOptionsFromArguments = (): UserOptions => {
             },
             showCommitFiles: {
                 type: 'boolean',
-                alias: 'sf',
                 describe: 'Show files changed in commits.',
-                default: false,
             },
             clearConsole: {
                 type: 'boolean',
-                alias: 'cs',
                 describe: 'Clear console before out info',
-                default: false,
             },
         })
+        .option('title', {choices: titles})
         .help('h')
         .alias('h', 'help')
         .wrap(yargs.terminalWidth()).argv;

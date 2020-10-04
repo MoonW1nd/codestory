@@ -9,10 +9,10 @@ import renderLineWithLabel from 'src/services/renderData/helpers/renderLineWithL
 import renderCommitInfo from 'src/services/renderData/helpers/renderCommitInfo';
 import renderCommitFiles from 'src/services/renderData/helpers/renderCommitFiles';
 
-const renderData = (gitData: GitData, options: Options): void => {
+const renderData = async (gitData: GitData, options: Options): Promise<void> => {
     const {branches, commits} = gitData;
 
-    renderCliName(true);
+    await renderCliName(options);
 
     const branchNames = Object.keys(branches);
 

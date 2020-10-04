@@ -1,4 +1,4 @@
-import chalk, {ChalkFunction} from 'chalk';
+import {white, ChalkFunction} from 'chalk';
 import {TAB} from 'src/constants';
 
 type RenderParams = {
@@ -20,6 +20,8 @@ const getIndent = (count = 0): string => {
 };
 
 const render = (text: string, params: RenderParams = {}): void => {
+    const {chalk = white} = params;
+
     console.log(chalk(`${getIndent(params.indent)}${text}`));
 };
 

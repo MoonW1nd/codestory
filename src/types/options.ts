@@ -1,6 +1,8 @@
 import {Url} from '@project-types/aliases';
 import {GitlogOptions} from '@project-types/gitlog';
 
+export type CliTitle = 'full' | 'minimal' | 'off';
+
 export type UserOptions = {
     /**
      * Show only commits in the specified branch or revision range.
@@ -39,6 +41,11 @@ export type UserOptions = {
      * @default false
      */
     clearConsole?: boolean;
+    /**
+     * Show cli name as title
+     * @default full
+     */
+    title?: CliTitle;
 };
 
 export type Options = UserOptions & GitlogOptions;
