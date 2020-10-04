@@ -7,6 +7,12 @@ export type BranchInfo = {
     refType?: BranchRefType;
 };
 
+export type ReflogRecord = {
+    head: string;
+    action: string;
+    description: string;
+};
+
 export type Branch = {
     id: string;
     commits: string[];
@@ -15,7 +21,7 @@ export type Branch = {
     repositoryUrl?: string;
 };
 
-export type Commit = GitLogCommit & {branchInfo: BranchInfo};
+export type Commit = GitLogCommit & {branchInfo: BranchInfo; reflog: ReflogRecord[]};
 
 export interface BranchCollection {
     [index: string]: Branch;

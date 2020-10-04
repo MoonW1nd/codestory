@@ -1,5 +1,5 @@
-import {GitlogOptions} from 'gitlog';
 import {Url} from '@project-types/aliases';
+import {GitlogOptions} from '@project-types/gitlog';
 
 export type UserOptions = {
     /**

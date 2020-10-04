@@ -1,6 +1,6 @@
 import {GitlogOptions as GitlogOptionsBase} from 'gitlog';
 
-export type GitLogFields = 'authorDate' | 'subject' | 'hash' | 'abbrevHash';
+export type GitLogFields = 'authorDate' | 'committerDate' | 'subject' | 'hash' | 'abbrevHash';
 
 export type GitlogOptions = GitlogOptionsBase<GitLogFields>;
 

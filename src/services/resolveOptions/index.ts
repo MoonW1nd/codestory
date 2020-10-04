@@ -5,10 +5,11 @@ import {DEFAULT_SINCE_PARAMS} from 'src/constants';
 
 import getOptionsFromConfig from './helpers/getOptionsFromConfig';
 import getOptionsFromArguments from './helpers/getOptionsFromArguments';
+import prepareDateOptions from 'src/services/resolveOptions/helpers/prepareDateOptions';
 
 const gitLogSystemOptons: GitlogOptions = {
     repo: process.cwd(),
-    fields: ['authorDate', 'subject', 'hash', 'abbrevHash'],
+    fields: ['authorDate', 'subject', 'hash', 'abbrevHash', 'committerDate'],
     execOptions: {maxBuffer: 1000 * 1024},
     all: true,
 };
@@ -23,7 +24,7 @@ const resolveOptions = async (): Promise<Options> => {
     const optionsFromArguments = getOptionsFromArguments();
     const optionsFromConfig = getOptionsFromConfig();
 
-    const options: UserOptions = {
+    let options: UserOptions = {
         ...defaultOptions,
         ...optionsFromConfig,
         ...optionsFromArguments,
@@ -38,6 +39,8 @@ const resolveOptions = async (): Promise<Options> => {
     if (isDateRangeNotSet) {
         options.since = DEFAULT_SINCE_PARAMS;
     }
+
+    options = prepareDateOptions(options);
 
     return {
         ...options,

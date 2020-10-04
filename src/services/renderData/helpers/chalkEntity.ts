@@ -10,6 +10,8 @@ const COLOR_MAP: Record<keyof typeof TextEntity, ChalkFunction> = {
     [TextEntity.addedFile]: green,
     [TextEntity.deletedFile]: red,
     [TextEntity.modifiedFile]: yellow,
+    [TextEntity.addedCommit]: green,
+    [TextEntity.modifiedCommit]: yellow,
 
     /**
      * Not tested colors

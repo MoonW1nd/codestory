@@ -15,6 +15,8 @@ export enum TextEntity {
     commitSubject = 'commitSubject',
     date = 'date',
     author = 'author',
+    addedCommit = 'addedCommit',
+    modifiedCommit = 'modifiedCommit',
     addedFile = 'addedFile',
     rebasedFile = 'rebasedFile',
     modifiedFile = 'modifiedFile',

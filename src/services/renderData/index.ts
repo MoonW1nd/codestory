@@ -36,7 +36,7 @@ const renderData = (gitData: GitData, options: Options): void => {
         branches[branchName].commits.map((commitHash) => {
             const commit = commits[commitHash];
 
-            renderCommitInfo(commit);
+            renderCommitInfo(commit, options);
             renderCommitFiles(commit, options);
         });
     });
