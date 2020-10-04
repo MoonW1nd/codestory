@@ -1,11 +1,14 @@
 import {Commit} from '@project-types/entities';
 import {GitLogCommit} from '@project-types/gitlog';
-import {getBranchInfoByCommitHash} from 'src/helpers';
+import {getBranchInfoByCommitHash, runCommand, getDateRangeGitLogOptions} from 'src/helpers';
 import {Options} from '@project-types/options';
 
 const ensureCommits = async (commits: GitLogCommit[], options: Options): Promise<Commit[]> => {
-    const branchNamesP = commits.map((commit) => getBranchInfoByCommitHash(commit.hash, options));
-    const branchNames = await Promise.all(branchNamesP);
+    const gitLogDataWithSource = await runCommand(
+        `git log --source --all --pretty=oneline ${getDateRangeGitLogOptions(options)}`,
+    );
+
+    const branchNames = commits.map((commit) => getBranchInfoByCommitHash(commit.hash, gitLogDataWithSource));
 
     return commits.map((commit, i) => ({
         ...commit,
