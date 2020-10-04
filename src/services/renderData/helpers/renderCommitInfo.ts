@@ -12,16 +12,32 @@ const renderCommitInfo = (commit: Commit, options: Options): void => {
 
     const sinceOption = options.since || options.after;
 
-    let isOnlyModified = false;
+    const modifiedCommitStatusText = chalkTextEntity(TextEntity.modifiedCommit, 'M');
+    const addedCommitSatusText = chalkTextEntity(TextEntity.addedCommit, 'A');
 
-    if (sinceOption) {
-        const authorDate = parseDate(commit.authorDate);
-        const sinceDate = parseDate(sinceOption);
+    const authorDate = parseDate(commit.authorDate);
+    const commiterDate = parseDate(commit.committerDate);
 
-        isOnlyModified = authorDate.getTime() < sinceDate.getTime();
+    const commitStatuses = [];
+
+    if (authorDate.getTime() === commiterDate.getTime()) {
+        commitStatuses.push(addedCommitSatusText);
+    } else {
+        if (sinceOption) {
+            const sinceDate = parseDate(sinceOption);
+            const isOnlyModifiedCommit = authorDate.getTime() < sinceDate.getTime();
+
+            if (!isOnlyModifiedCommit) {
+                commitStatuses.push(addedCommitSatusText);
+            }
+        }
+
+        commitStatuses.push(modifiedCommitStatusText);
     }
 
-    const renderText = `${isOnlyModified ? '[M] ' : ''}${chalkedDate} ${chalkedSubject}`;
+    const commitStatusText = commitStatuses.length === 1 ? ` ${commitStatuses[0]}` : commitStatuses.join('');
+
+    const renderText = `${commitStatusText} ${chalkedDate} ${chalkedSubject}`;
     render(renderText, {indent: 1});
 };
 
