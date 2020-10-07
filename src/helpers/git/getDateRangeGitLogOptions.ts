@@ -10,11 +10,11 @@ const getDateRangeGitLogOptions = (options: Options): string => {
 
     DATE_RANGE_OPTION_NAMES.forEach((optionName) => {
         if (options[optionName]) {
-            commandOptions += `--${optionName}=${options[optionName]}`;
+            commandOptions += ` --${optionName}=${options[optionName]}`;
         }
     });
 
-    return commandOptions;
+    return commandOptions.trim();
 };
 
 export default getDateRangeGitLogOptions;
