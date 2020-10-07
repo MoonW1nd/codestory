@@ -1,7 +1,7 @@
 import {Url} from '@project-types/aliases';
 import {GitlogOptions} from '@project-types/gitlog';
 
-export type CliTitle = 'full' | 'minimal' | 'off';
+export type CliHeader = 'full' | 'minimal' | 'off';
 
 export type UserOptions = {
     /**
@@ -45,7 +45,7 @@ export type UserOptions = {
      * Show cli name as title
      * @default full
      */
-    title?: CliTitle;
+    header?: CliHeader;
 };
 
 export type Options = UserOptions & GitlogOptions;

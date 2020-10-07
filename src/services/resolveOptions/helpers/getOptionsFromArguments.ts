@@ -1,8 +1,8 @@
 import yargs from 'yargs';
 
-import {UserOptions, CliTitle} from '@project-types/options';
+import {UserOptions, CliHeader} from '@project-types/options';
 
-const titles: ReadonlyArray<CliTitle> = ['full', 'minimal', 'off'];
+const headerTypes: ReadonlyArray<CliHeader> = ['full', 'minimal', 'off'];
 
 const getOptionsFromArguments = (): UserOptions => {
     return yargs
@@ -68,7 +68,7 @@ const getOptionsFromArguments = (): UserOptions => {
                 describe: 'Clear console before out info',
             },
         })
-        .option('title', {choices: titles})
+        .option('header', {choices: headerTypes})
         .help('h')
         .alias('h', 'help')
         .wrap(yargs.terminalWidth()).argv;

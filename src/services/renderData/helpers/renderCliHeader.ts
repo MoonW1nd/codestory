@@ -7,7 +7,7 @@ import {TextEntity} from 'src/constants';
 import chalkTextEntity from 'src/services/renderData/helpers/chalkEntity';
 
 const renderCliHeader = async (options: Options): Promise<void> => {
-    const {title, author = '', since, before, after, until} = options;
+    const {header, author = '', since, before, after, until} = options;
     const fromDate = since || after;
     const toDate = before || until;
     let dateRangeText;
@@ -27,7 +27,7 @@ const renderCliHeader = async (options: Options): Promise<void> => {
     const chalkedRepositoryName = chalkTextEntity(TextEntity.repositoryName, repositoryName);
     const chalkedDate = dateRangeText && chalkTextEntity(TextEntity.date, dateRangeText);
 
-    if (title === 'full') {
+    if (header === 'full') {
         const cliName = figlet.textSync('code story', {horizontalLayout: 'full'});
 
         render(cliName);
@@ -36,7 +36,7 @@ const renderCliHeader = async (options: Options): Promise<void> => {
         render('');
     }
 
-    if (title === 'minimal') {
+    if (header === 'minimal') {
         render(`Repository ${chalkedRepositoryName} `, {chalk: white.bold});
         render(`Author ${chalkedAuthorName}`, {chalk: white.bold});
         dateRangeText && render(`Story ${chalkedDate}`, {chalk: dim});

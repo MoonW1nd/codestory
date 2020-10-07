@@ -18,7 +18,7 @@ const defaultOptions: UserOptions = {
     number: 999,
     clearConsole: false,
     showCommitFiles: false,
-    title: 'full',
+    header: 'full',
 };
 
 const resolveOptions = async (): Promise<Options> => {
