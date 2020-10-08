@@ -16,14 +16,29 @@ Opinionated git log parser shows which code you worked on in the specified perio
 
 **Output example:**
 ```shell
+                     _                  _
+   ___    ___     __| |   ___     ___  | |_    ___    _ __   _   _
+  / __|  / _ \   / _` |  / _ \   / __| | __|  / _ \  | '__| | | | |
+ | (__  | (_) | | (_| | |  __/   \__ \ | |_  | (_) | | |    | |_| |
+  \___|  \___/   \__,_|  \___|   |___/  \__|  \___/  |_|     \__, |
+                                                             |___/
+Story since 23:23 17.09.2020 until 23:23 06.10.2020
+Author: Alexander Ivankov Repository: codestory
+
 feature/CODESTORY-1-documentation  ───────────────────────────────────────── branch name
 PR: https://github.com/MoonW1nd/codestory/pull/feature/CODESTORY-1-doc  ──── link on PR
 TASK: https://tracker.yandex.ru/CODESTORY-1  ─────────────────────────────── task tracker link
-COMMITS:  ┌───────────────────────────────────────────────────────────────── commit date
-    2020-09-21 feat(readme.md): start documentation  ─────────────────────── commit title
-        A README.md  ─────────────────────────────────────────────────────── changed file
-        └─────────────────────────────────────────────────────────────────── modification type
+COMMITS:
+    A 2020-09-21 1234826 feat(readme.md): start documentation ─────── commit info
+    │    A README.md  ─────────────────────────────────────────────── changed file
+    │    └─────────────────────────────────────────────────────────── file modification type (*)
+    └──────────────────────────────────────────────────────────────── commit modification type (*)
 ```
+> (*) Modification types:
+>  - A - add file/commit
+>  - M - modified file/commit
+>  - D - delete file
+
 
 ## Installation
 
@@ -32,21 +47,22 @@ npm i -g code-story
 ```
 
 ## Options
-| flag                | alias  | description                                                                                 | type    | default |
-|---------------------|--------|---------------------------------------------------------------------------------------------|---------|---------|
-| `--since`           | `-s`   | Show commits more recent than a specific date.                                              | string  |         |
-| `--after`           | `-a`   | Show commits more recent than a specific date.                                              | string  |         |
-| `--until`           | `-u`   | Show commits older than a specific date.                                                    | string  |         |
-| `--before`          | `-b`   | Show commits older than a specific date.                                                    | string  |         |
-| `--trackerUrl`      | `-t`   | Base url in task tracker system.                                                            | string  |         |
-| `--author`          |        | Limit the commits output to ones with author header lines that match the specified pattern. | string  |         |
-| `--branch`          | `-b`   | Show only commits in the specified branch or revision range.                                | string  |         |
-| `--number`          | `-n`   | The number of commits to return                                                             | number  | 999     |
-| `--file`            | `-f`   | File filter for the git log command                                                         | string  |         |
-| `--committer`       |        | Limit the commits output to ones with author header lines that match the specified pattern. | string  |         |
-| `--showCommitFiles` | `--sf` | Show files changed in commits.                                                              | boolean | false   |
-| `--clearConsole`    | `--cs` | Clear console before out info                                                               | boolean | false   |
-| `--help`            | `-h`   | Show help                                                                                   | boolean |         |
+| flag                | alias | description                                                                                 | type                     | default |
+|---------------------|-------|---------------------------------------------------------------------------------------------|--------------------------|---------|
+| `--since`           | `-s`  | Show commits more recent than a specific date.                                              | string                   |         |
+| `--after`           | `-a`  | Show commits more recent than a specific date.                                              | string                   |         |
+| `--until`           | `-u`  | Show commits older than a specific date.                                                    | string                   |         |
+| `--before`          | `-b`  | Show commits older than a specific date.                                                    | string                   |         |
+| `--trackerUrl`      | `-t`  | Base url in task tracker system.                                                            | string                   |         |
+| `--author`          |       | Limit the commits output to ones with author header lines that match the specified pattern. | string                   |         |
+| `--branch`          | `-b`  | Show only commits in the specified branch or revision range.                                | string                   |         |
+| `--number`          | `-n`  | The number of commits to return                                                             | number                   | 999     |
+| `--file`            | `-f`  | File filter for the git log command                                                         | string                   |         |
+| `--committer`       |       | Limit the commits output to ones with author header lines that match the specified pattern. | string                   |         |
+| `--showCommitFiles` |       | Show files changed in commits.                                                              | boolean                  | false   |
+| `--clearConsole`    |       | Clear console before out info                                                               | boolean                  | false   |
+| `--header`          |       | Cli header type                                                                             | 'full', 'minimal', 'off' | 'full'  |
+| `--help`            | `-h`  | Show help                                                                                   | boolean                  |         |
  
 ## Config file
 
@@ -64,7 +80,6 @@ code-story --since=1.week.ago
 ```
 
 ## Known issues
- - rebased commits detected as changed ([#14](https://github.com/MoonW1nd/codestory/issues/14))
  - wrong detect branch name in branch without commits ([#4](https://github.com/MoonW1nd/codestory/issues/4))
 
 

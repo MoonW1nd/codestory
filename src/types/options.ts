@@ -42,7 +42,7 @@ export type UserOptions = {
      */
     clearConsole?: boolean;
     /**
-     * Show cli name as title
+     * Header type
      * @default full
      */
     header?: CliHeader;

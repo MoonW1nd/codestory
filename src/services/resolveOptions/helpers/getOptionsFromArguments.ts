@@ -68,7 +68,7 @@ const getOptionsFromArguments = (): UserOptions => {
                 describe: 'Clear console before out info',
             },
         })
-        .option('header', {choices: headerTypes})
+        .option('header', {choices: headerTypes, describe: 'Cli header type'})
         .help('h')
         .alias('h', 'help')
         .wrap(yargs.terminalWidth()).argv;
