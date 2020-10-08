@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/MoonW1nd/codestory/compare/v0.2.3...v0.3.0) (2020-10-08)
+
+
+### Features
+
+* **parse date:** add helper for work with date ([e6aa7f6](https://github.com/MoonW1nd/codestory/commit/e6aa7f6e835d20e84a5fc76cc4b3a35c9d281437))
+* **render:** add badge for only modify commits in period ([a66317b](https://github.com/MoonW1nd/codestory/commit/a66317b709ee69e52145f2c8a58676100737e67a))
+* **render:** add render commit hash ([a02e448](https://github.com/MoonW1nd/codestory/commit/a02e448bc2ab7948853040fd3fcce6c175cb6ff2))
+* **render:** add some style title ([a767025](https://github.com/MoonW1nd/codestory/commit/a767025413fb71e34380f07615959f0299c68bc9))
+* **render:** combination commit status ([3daa835](https://github.com/MoonW1nd/codestory/commit/3daa83588ceb9f85dc2fd8e17bfe2c4d11fbdc0d))
+* **render header:** add date range in header ([e389dc0](https://github.com/MoonW1nd/codestory/commit/e389dc0f4200ea5ad283bed31c39faf234947a62))
+* reflog records ([a30a1dc](https://github.com/MoonW1nd/codestory/commit/a30a1dc4efb17e02edd32b6f85983520b9818ae7))
+
+
+### Bug Fixes
+
+* **git data:** bug with generating commands flags ([50eb8d4](https://github.com/MoonW1nd/codestory/commit/50eb8d4e6d685198ade46b51882545472a404e32))
+* **resolve data:** add all flag in options ([d5d3ac4](https://github.com/MoonW1nd/codestory/commit/d5d3ac45a852edc51d682e6560052e47f43ef04b))
+
 ### [0.2.3](https://github.com/MoonW1nd/codestory/compare/v0.2.2...v0.2.3) (2020-09-29)
 
 

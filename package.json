@@ -1,6 +1,6 @@
 {
     "name": "code-story",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "description": "Tool for parse git reflog",
     "author": "Alexander Ivankov",
     "homepage": "https://github.com/MoonW1nd/codestory#code-story-cli",
