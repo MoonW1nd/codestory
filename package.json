@@ -2,6 +2,24 @@
     "name": "code-story",
     "version": "0.2.3",
     "description": "Tool for parse git reflog",
+    "author": "Alexander Ivankov",
+    "homepage": "https://github.com/MoonW1nd/codestory#code-story-cli",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MoonW1nd/codestory.git"
+    },
+    "bugs": {
+        "url": "https://github.com/MoonW1nd/codestory/issues"
+    },
+    "license": "MIT",
+    "keywords": [
+        "git",
+        "standup",
+        "agile",
+        "cli",
+        "log",
+        "daily"
+    ],
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "bin": {
@@ -24,8 +42,6 @@
             "path": "./node_modules/cz-conventional-changelog"
         }
     },
-    "author": "Alexander Ivankov",
-    "license": "MIT",
     "dependencies": {
         "chalk": "^4.1.0",
         "chrono-node": "^2.1.8",
