@@ -1,6 +1,8 @@
 import {Url} from '@project-types/aliases';
 import {GitlogOptions} from '@project-types/gitlog';
 
+export type CliHeader = 'full' | 'minimal' | 'off';
+
 export type UserOptions = {
     /**
      * Show only commits in the specified branch or revision range.
@@ -39,6 +41,11 @@ export type UserOptions = {
      * @default false
      */
     clearConsole?: boolean;
+    /**
+     * Header type
+     * @default full
+     */
+    header?: CliHeader;
 };
 
 export type Options = UserOptions & GitlogOptions;

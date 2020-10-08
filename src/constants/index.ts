@@ -10,6 +10,7 @@ export enum TextEntity {
     url = 'url',
     nope = 'nope',
     label = 'label',
+    repositoryName = 'repositoryName',
     branch = 'branch',
     commitHash = 'commitHash',
     commitSubject = 'commitSubject',

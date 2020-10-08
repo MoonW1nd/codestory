@@ -4,6 +4,7 @@ import {TextEntity} from 'src/constants';
 const COLOR_MAP: Record<keyof typeof TextEntity, ChalkFunction> = {
     [TextEntity.url]: blue,
     [TextEntity.label]: cyan,
+    [TextEntity.repositoryName]: cyan,
     [TextEntity.branch]: magenta.bold,
     [TextEntity.date]: dim,
     [TextEntity.commitSubject]: white,
@@ -12,11 +13,11 @@ const COLOR_MAP: Record<keyof typeof TextEntity, ChalkFunction> = {
     [TextEntity.modifiedFile]: yellow,
     [TextEntity.addedCommit]: green,
     [TextEntity.modifiedCommit]: yellow,
+    [TextEntity.author]: yellow,
 
     /**
      * Not tested colors
      */
-    [TextEntity.author]: dim,
     [TextEntity.commitHash]: red,
     [TextEntity.rebasedFile]: dim,
     [TextEntity.nope]: white,

@@ -8,13 +8,16 @@ const ensureCommits = async (commits: GitLogCommit[], options: Options): Promise
         `git log --source --all --pretty=oneline ${getDateRangeGitLogOptions(options)}`,
     );
 
-    const reflogData = await runCommand(`git log -g --all --pretty=oneline ${getDateRangeGitLogOptions(options)}`);
+    /**
+     * Temporary off not using reflog data
+     */
+    // const reflogData = await runCommand(`git log -g --all --pretty=oneline ${getDateRangeGitLogOptions(options)}`);
 
     const branchNames = commits.map((commit) => getBranchInfoByCommitHash(commit.hash, gitLogDataWithSource));
 
     return commits.map((commit, i) => ({
         ...commit,
-        reflog: getCommitReflog(commit.abbrevHash, reflogData),
+        reflog: getCommitReflog(commit.abbrevHash, ''),
         branchInfo: branchNames[i],
     }));
 };
