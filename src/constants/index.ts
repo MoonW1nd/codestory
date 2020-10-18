@@ -1,5 +1,3 @@
-export const DEFAULT_SINCE_PARAMS = '1.day.ago';
-
 export const TAB = '    ';
 
 export const LINE_BREAK_CHAR = '\n';
@@ -22,4 +20,14 @@ export enum TextEntity {
     rebasedFile = 'rebasedFile',
     modifiedFile = 'modifiedFile',
     deletedFile = 'deletedFile',
+}
+
+export enum WeekDayCode {
+    sunday = 0,
+    monday = 1,
+    tuesday = 2,
+    wednesday = 3,
+    thursday = 4,
+    friday = 5,
+    saturday = 6,
 }

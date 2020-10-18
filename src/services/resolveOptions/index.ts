@@ -1,11 +1,11 @@
 import {UserOptions, Options} from '@project-types/options';
 import {GitlogOptions} from '@project-types/gitlog';
 import {getUserName} from 'src/helpers';
-import {DEFAULT_SINCE_PARAMS} from 'src/constants';
 
 import getOptionsFromConfig from './helpers/getOptionsFromConfig';
 import getOptionsFromArguments from './helpers/getOptionsFromArguments';
 import prepareDateOptions from 'src/services/resolveOptions/helpers/prepareDateOptions';
+import getDefaultSinceParams from './helpers/getDefaultSinceParams';
 
 const gitLogSystemOptons: GitlogOptions = {
     repo: process.cwd(),
@@ -38,7 +38,7 @@ const resolveOptions = async (): Promise<Options> => {
     const isDateRangeNotSet = !Boolean(options.after || options.before || options.since || options.until);
 
     if (isDateRangeNotSet) {
-        options.since = DEFAULT_SINCE_PARAMS;
+        options.since = getDefaultSinceParams();
     }
 
     options = prepareDateOptions(options);
