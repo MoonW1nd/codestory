@@ -22,12 +22,12 @@ export enum TextEntity {
     deletedFile = 'deletedFile',
 }
 
-export enum WeekDayCode {
-    sunday = 0,
-    monday = 1,
-    tuesday = 2,
-    wednesday = 3,
-    thursday = 4,
-    friday = 5,
-    saturday = 6,
+export enum OPTIONS_WEEK_DAY_CODE_MAP {
+    Su = 0,
+    Mo = 1,
+    Tu = 2,
+    We = 3,
+    Th = 4,
+    Fr = 5,
+    Sa = 6,
 }

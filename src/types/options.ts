@@ -46,6 +46,10 @@ export type UserOptions = {
      * @default full
      */
     header?: CliHeader;
+    /**
+     * Set working days of the week
+     */
+    workingDaysOfWeek?: string;
 };
 
 export type Options = UserOptions & GitlogOptions;
