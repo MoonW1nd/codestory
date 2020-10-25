@@ -50,6 +50,11 @@ export type UserOptions = {
      * Set working days of the week
      */
     workingDaysOfWeek?: string;
+
+    /**
+     * Show log by start startDayTime
+     */
+    startDayTime?: string;
 };
 
 export type Options = UserOptions & GitlogOptions;

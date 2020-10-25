@@ -67,6 +67,11 @@ const getOptionsFromArguments = (): UserOptions => {
                 type: 'boolean',
                 describe: 'Clear console before out info',
             },
+            workingDaysOfWeek: {
+                type: 'string',
+                describe: `Set working days of the week, use 2 first letter of day in the list and separated a comma.
+                    Use ! symbol for exclude day. Example: --workingDaysOfWeek="!Su,!Sa"`,
+            },
         })
         .option('header', {choices: headerTypes, describe: 'Cli header type'})
         .help('h')

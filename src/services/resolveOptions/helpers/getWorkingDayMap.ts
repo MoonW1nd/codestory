@@ -7,11 +7,11 @@ type WeekDayCodes = ['0', '1', '2', '3', '4', '5', '6'];
 
 /**
  * Format for set working days
- * --workingDaysOfWeek="!Fr,!Su,!Sa"
+ * --workingDaysOfWeek="Fr,Su,Sa"
  */
 const getWorkingDayMap = (options: UserOptions): WorkingDayMap => {
     const workingDaysOption = options.workingDaysOfWeek;
-    const workingDaysParams = workingDaysOption?.split(' ').map(trim);
+    const workingDaysParams = workingDaysOption?.split(',').map(trim);
 
     const workingDay: WorkingDayMap = {
         0: null,
