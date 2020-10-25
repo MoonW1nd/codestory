@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/MoonW1nd/codestory/compare/v0.3.0...v0.4.0) (2020-10-25)
+
+
+### Features
+
+* add ability to set working day ([a8234c5](https://github.com/MoonW1nd/codestory/commit/a8234c509aefa2819ebe7b67576c823656863160))
+* add separators between key: value in header ([7085c14](https://github.com/MoonW1nd/codestory/commit/7085c1490d1b636c6c079779b556ebc774e36057))
+* add startDayTime parameter ([047b324](https://github.com/MoonW1nd/codestory/commit/047b324ab55533c1f40990ab295c337d9911c4aa))
+* implementation get working day of week map ([c2e9901](https://github.com/MoonW1nd/codestory/commit/c2e9901569966b1127b4cdc8c30599fe3e475730))
+* remove sunday and saturday from search without set randge ([2004878](https://github.com/MoonW1nd/codestory/commit/200487892e1091698deab712cf93b4510a8d039d))
+* **render:** add no commit message for view with header ([18149a3](https://github.com/MoonW1nd/codestory/commit/18149a3de223beb7d451874b6d965973d9d071e3))
+
 ## [0.3.0](https://github.com/MoonW1nd/codestory/compare/v0.2.3...v0.3.0) (2020-10-08)
 
 
