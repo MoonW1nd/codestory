@@ -1,7 +1,7 @@
 {
     "name": "code-story",
     "version": "0.3.0",
-    "description": "Tool for parse git reflog",
+    "description": "Get your code activity log for stand up from git",
     "author": "Alexander Ivankov",
     "homepage": "https://github.com/MoonW1nd/codestory#code-story-cli",
     "repository": {
