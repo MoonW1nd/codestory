@@ -74,7 +74,8 @@ const getOptionsFromArguments = (): UserOptions => {
             },
             startDayTime: {
                 type: 'string',
-                describe: `Sets the start time of the day. The commit history will start and end from this time.`,
+                describe: `Sets the start time of the day. The commit history will start and end from this time.
+                    Format: hours:minutes. Example: --startDayTime="09:00"`,
             },
         })
         .option('header', {choices: headerTypes, describe: 'Cli header type'})
