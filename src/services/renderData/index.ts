@@ -8,6 +8,7 @@ import renderLineWithLabel from 'src/services/renderData/helpers/renderLineWithL
 import renderCommitInfo from 'src/services/renderData/helpers/renderCommitInfo';
 import renderCommitFiles from 'src/services/renderData/helpers/renderCommitFiles';
 import renderCliHeader from 'src/services/renderData/helpers/renderCliHeader';
+import renderNoCommitsMessage from './helpers/renderNoCommitsMessage';
 
 const renderData = async (gitData: GitData, options: Options): Promise<void> => {
     const {branches, commits} = gitData;
@@ -15,6 +16,10 @@ const renderData = async (gitData: GitData, options: Options): Promise<void> => 
     await renderCliHeader(options);
 
     const branchNames = Object.keys(branches);
+
+    if (branchNames.length === 0 && options.header !== 'off') {
+        renderNoCommitsMessage();
+    }
 
     branchNames.map((branchName, i) => {
         if (i > 0) {

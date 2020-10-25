@@ -1,29 +1,25 @@
 # code story cli
 [![NPM version][npm-image]][npm-url]
 [![Conventional Commits][conventional-commits-image]][conventional-commits-url]
+> Get your code activity log for standup from git.
+> &nbsp; ⚠️ **This is beta version**
 
-  > ⚠️ **This is beta version**
-
-## Description 
 Opinionated git log parser shows which code you worked on in the specified period, providing additional useful information.
 
 **Features:**
  - group commit by branch
  - show link on task tracker
  - show link on PR, branch or tag
+ - the ability to set working day for smart detect show log period with common usage
+ - the ability to set the start time of the day, which will help you more accurately determine what you were doing
  - show changed files in commits
  - support config file
 
 **Output example:**
 ```shell
-                     _                  _
-   ___    ___     __| |   ___     ___  | |_    ___    _ __   _   _
-  / __|  / _ \   / _` |  / _ \   / __| | __|  / _ \  | '__| | | | |
- | (__  | (_) | | (_| | |  __/   \__ \ | |_  | (_) | | |    | |_| |
-  \___|  \___/   \__,_|  \___|   |___/  \__|  \___/  |_|     \__, |
-                                                             |___/
-Story since 23:23 17.09.2020 until 23:23 06.10.2020
-Author: Alexander Ivankov Repository: codestory
+Repository: codestory
+Author: Alexander Ivankov
+Story since 11:30 18.10.2020 until 11:30 23.10.2020
 
 feature/CODESTORY-1-documentation  ───────────────────────────────────────── branch name
 PR: https://github.com/MoonW1nd/codestory/pull/feature/CODESTORY-1-doc  ──── link on PR
@@ -47,22 +43,24 @@ npm i -g code-story
 ```
 
 ## Options
-| flag                | alias | description                                                                                 | type                     | default |
-|---------------------|-------|---------------------------------------------------------------------------------------------|--------------------------|---------|
-| `--since`           | `-s`  | Show commits more recent than a specific date.                                              | string                   |         |
-| `--after`           | `-a`  | Show commits more recent than a specific date.                                              | string                   |         |
-| `--until`           | `-u`  | Show commits older than a specific date.                                                    | string                   |         |
-| `--before`          | `-b`  | Show commits older than a specific date.                                                    | string                   |         |
-| `--trackerUrl`      | `-t`  | Base url in task tracker system.                                                            | string                   |         |
-| `--author`          |       | Limit the commits output to ones with author header lines that match the specified pattern. | string                   |         |
-| `--branch`          | `-b`  | Show only commits in the specified branch or revision range.                                | string                   |         |
-| `--number`          | `-n`  | The number of commits to return                                                             | number                   | 999     |
-| `--file`            | `-f`  | File filter for the git log command                                                         | string                   |         |
-| `--committer`       |       | Limit the commits output to ones with author header lines that match the specified pattern. | string                   |         |
-| `--showCommitFiles` |       | Show files changed in commits.                                                              | boolean                  | false   |
-| `--clearConsole`    |       | Clear console before out info                                                               | boolean                  | false   |
-| `--header`          |       | Cli header type                                                                             | 'full', 'minimal', 'off' | 'full'  |
-| `--help`            | `-h`  | Show help                                                                                   | boolean                  |         |
+| <img width=300 /> flag                                                           | <img />  alias | <img /> <br>  description                                                                                                                                                              | <img /> <br> type                     | <img /> default |
+|----------------------------------------------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|---------|
+| `--since`                                                      | `-s`  | Show commits more recent than a specific date.                                                                                                                           | string                   |         |
+| `--after`                                                      | `-a`  | Show commits more recent than a specific date.                                                                                                                           | string                   |         |
+| `--until`                                                      | `-u`  | Show commits older than a specific date.                                                                                                                                 | string                   |         |
+| `--before`                                                     | `-b`  | Show commits older than a specific date.                                                                                                                                 | string                   |         |
+| `--trackerUrl`                                                 | `-t`  | Base url in task tracker system.                                                                                                                                         | string                   |         |
+| `--author`                                                     |       | Limit the commits output to ones with author header lines that match the specified pattern.                                                                              | string                   |         |
+| `--branch`                                                     | `-b`  | Show only commits in the specified branch or revision range.                                                                                                             | string                   |         |
+| `--number`                                                     | `-n`  | The number of commits to return                                                                                                                                          | number                   | 999     |
+| `--file`                                                       | `-f`  | File filter for the git log command                                                                                                                                      | string                   |         |
+| `--committer`                                                  |       | Limit the commits output to ones with author header lines that match the specified pattern.                                                                              | string                   |         |
+| `--showCommitFiles`                                            |       | Show files changed in commits.                                                                                                                                           | boolean                  | false   |
+| `--clearConsole`                                               |       | Clear console before out info                                                                                                                                            | boolean                  | false   |
+| <span style="white-space: nowrap">`--workingDaysOfWeek`</span> |       | Sets working days of the week, use 2 first letter of day in the list and separated a comma.Use `!` symbol for exclude day. <br> Example: `--workingDaysOfWeek="!Su,!Sa"` | string                   |         |
+| `--startDayTime`                                               |       | Sets the start time of the day. The commit history will start and end from this time. <br> Format: `hours:minutes` <br> Example: `--startDayTime="09:00"`                | string                   |         |
+| `--header`                                                     |       | Cli header type                                                                                                                                                          | 'full', 'minimal', 'off' | 'full'  |
+| `--help`                                                       | `-h`  | Show help                                                                                                                                                                | boolean                  |         |
  
 ## Config file
 
