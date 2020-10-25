@@ -37,8 +37,8 @@ const renderCliHeader = async (options: Options): Promise<void> => {
     }
 
     if (header === 'minimal') {
-        render(`Repository ${chalkedRepositoryName} `, {chalk: white.bold});
-        render(`Author ${chalkedAuthorName}`, {chalk: white.bold});
+        render(`Repository: ${chalkedRepositoryName} `, {chalk: white.bold});
+        render(`Author: ${chalkedAuthorName}`, {chalk: white.bold});
         dateRangeText && render(`Story ${chalkedDate}`, {chalk: dim});
         render('');
     }
