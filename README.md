@@ -43,7 +43,7 @@ npm i -g code-story
 ```
 
 ## Options
-| flag                                                           | alias | description                                                                                                                                                              | type                     | default |
+| <img width=300 /> flag                                                           | <img />  alias | <img /> <br>  description                                                                                                                                                              | <img /> <br> type                     | <img /> default |
 |----------------------------------------------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|---------|
 | `--since`                                                      | `-s`  | Show commits more recent than a specific date.                                                                                                                           | string                   |         |
 | `--after`                                                      | `-a`  | Show commits more recent than a specific date.                                                                                                                           | string                   |         |
