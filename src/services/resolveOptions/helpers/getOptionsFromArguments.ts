@@ -72,6 +72,10 @@ const getOptionsFromArguments = (): UserOptions => {
                 describe: `Set working days of the week, use 2 first letter of day in the list and separated a comma.
                     Use ! symbol for exclude day. Example: --workingDaysOfWeek="!Su,!Sa"`,
             },
+            startDayTime: {
+                type: 'string',
+                describe: `Sets the start time of the day. The commit history will start and end from this time.`,
+            },
         })
         .option('header', {choices: headerTypes, describe: 'Cli header type'})
         .help('h')

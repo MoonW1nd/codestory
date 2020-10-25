@@ -1,5 +1,5 @@
 import {UserOptions} from '@project-types/options';
-import {parseDate} from 'src/helpers';
+import {parseDate, parseStartDayTimeOption} from 'src/helpers';
 
 const DATE_KEYS = ['since', 'after', 'before', 'until'] as const;
 
@@ -8,9 +8,15 @@ const prepareDateOptions = (options: UserOptions): UserOptions => {
         const value = options[key];
 
         if (value) {
-            const dateString = parseDate(value);
+            let date = parseDate(value);
 
-            options[key] = dateString ? dateString.toISOString() : undefined;
+            if (options.startDayTime) {
+                const {hours, minutes} = parseStartDayTimeOption(options.startDayTime);
+
+                date = new Date(date.setHours(hours, minutes));
+            }
+
+            options[key] = date ? date.toISOString() : undefined;
         }
     });
 
