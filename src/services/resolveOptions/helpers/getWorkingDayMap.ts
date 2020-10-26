@@ -57,7 +57,7 @@ const getWorkingDayMap = (options: UserOptions): WorkingDayMap => {
      */
     if (hasValidParam) {
         (Object.keys(workingDay) as WeekDayCodes).forEach((day) => {
-            if (!workingDay[day]) {
+            if (workingDay[day] === null) {
                 workingDay[day] = false;
             }
         });
@@ -65,7 +65,7 @@ const getWorkingDayMap = (options: UserOptions): WorkingDayMap => {
         return workingDay;
     } else if (!hasValidParam && hasValidExcludeParam) {
         (Object.keys(workingDay) as WeekDayCodes).forEach((day) => {
-            if (!workingDay[day]) {
+            if (workingDay[day] === null) {
                 workingDay[day] = true;
             }
         });
