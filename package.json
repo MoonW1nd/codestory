@@ -1,6 +1,6 @@
 {
     "name": "code-story",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "Get your code activity log for standup from git",
     "author": "Alexander Ivankov",
     "homepage": "https://github.com/MoonW1nd/codestory#code-story-cli",
