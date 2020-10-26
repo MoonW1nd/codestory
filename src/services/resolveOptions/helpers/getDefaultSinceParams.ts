@@ -14,7 +14,7 @@ const getWorkingDayOffset = (workingDays: WorkingDayMap, currentDayCode: WeekDay
     const isWorkingDay = workingDays[currentDayCode];
 
     if (isWorkingDay) {
-        return offset;
+        return offset + DEFAULT_OFFSET;
     }
 
     const previousDayCode = getPreviousDayCode(currentDayCode);
@@ -23,7 +23,12 @@ const getWorkingDayOffset = (workingDays: WorkingDayMap, currentDayCode: WeekDay
 
 const getDefaultSinceParams = (workingDays: WorkingDayMap): string => {
     const currentDayCode = String(new Date(Date.now()).getDay()) as WeekDayCode;
-    const offset = getWorkingDayOffset(workingDays, currentDayCode) || DEFAULT_OFFSET;
+    const previousDayCode = getPreviousDayCode(currentDayCode);
+    let offset = DEFAULT_OFFSET;
+
+    if (!workingDays[previousDayCode]) {
+        offset = getWorkingDayOffset(workingDays, previousDayCode);
+    }
 
     return `${offset}.day.ago`;
 };
