@@ -1,7 +1,7 @@
 {
     "name": "code-story",
     "version": "0.4.0",
-    "description": "Get your code activity log for stand up from git",
+    "description": "Get your code activity log for standup from git",
     "author": "Alexander Ivankov",
     "homepage": "https://github.com/MoonW1nd/codestory#code-story-cli",
     "repository": {
@@ -15,6 +15,10 @@
     "keywords": [
         "git",
         "standup",
+        "meeting",
+        "productivity",
+        "standup-report",
+        "team",
         "agile",
         "cli",
         "log",
