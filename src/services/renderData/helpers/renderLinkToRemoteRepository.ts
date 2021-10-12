@@ -5,6 +5,7 @@ import renderLineWithLabel from 'src/services/renderData/helpers/renderLineWithL
 
 const renderLinkToRemoteRepository = (branch: Branch): void => {
     const {repositoryUrl, refType, id: name} = branch;
+    //git config --get remote.origin.url | sed -E -e 's+https://|http://|^git@|.git$++g' | sed 's+:+/+g' | sed 's+^+http://+'
 
     if (repositoryUrl) {
         const chalkedUrl = chalkTextEntity(TextEntity.url, repositoryUrl);

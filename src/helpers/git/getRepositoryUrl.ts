@@ -1,12 +1,14 @@
 import {Url} from '@project-types/aliases';
 
-import {runCommand} from '../runCommand';
+import {executeCommand} from '../runCommand';
 
 /**
  * Получение url текущего репозитория
  */
 const getRepositoryUrl = async (): Promise<Url> => {
-    const gitRepositoryUrl = await runCommand('git config --get remote.origin.url');
+    const gitRepositoryUrl = await executeCommand(
+        "git config --get remote.origin.url | sed -E -e 's+https://|http://|^git@|.git$++g' | sed 's+:+/+g' | sed 's+^+http://+'",
+    );
 
     return gitRepositoryUrl.replace(/\.git/gi, '').trim();
 };

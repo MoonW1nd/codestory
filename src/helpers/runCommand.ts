@@ -1,4 +1,4 @@
-import {spawn, SpawnOptionsWithoutStdio} from 'child_process';
+import {spawn, exec, SpawnOptionsWithoutStdio} from 'child_process';
 
 /**
  * Run command with text output in terminal
@@ -23,6 +23,19 @@ export const runCommand = (command: string, options?: SpawnOptionsWithoutStdio):
             resolve(result);
 
             return code;
+        });
+    });
+};
+
+export const executeCommand = (command: string): Promise<string> => {
+    return new Promise(function (resolve, reject) {
+        exec(command, (error, stdout) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(stdout.trim());
         });
     });
 };
