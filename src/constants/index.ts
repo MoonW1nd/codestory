@@ -31,3 +31,8 @@ export enum OPTIONS_WEEK_DAY_CODE_MAP {
     Fr = 5,
     Sa = 6,
 }
+
+export enum CommandResultCode {
+    Error = 1,
+    Success = 0,
+}
