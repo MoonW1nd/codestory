@@ -1,7 +1,8 @@
-import {Commit} from '@project-types/entities';
+import {Commit, BranchInfo} from '@project-types/entities';
 import {GitLogCommit} from '@project-types/gitlog';
 import {getBranchInfoByCommitHash, runCommand, getDateRangeGitLogOptions, getCommitReflog} from 'src/helpers';
 import {Options} from '@project-types/options';
+import {CommandResultCode} from 'src/constants';
 
 const ensureCommits = async (commits: GitLogCommit[], options: Options): Promise<Commit[]> => {
     const gitLogDataWithSource = await runCommand(
@@ -13,12 +14,16 @@ const ensureCommits = async (commits: GitLogCommit[], options: Options): Promise
      */
     // const reflogData = await runCommand(`git log -g --all --pretty=oneline ${getDateRangeGitLogOptions(options)}`);
 
-    const branchNames = commits.map((commit) => getBranchInfoByCommitHash(commit.hash, gitLogDataWithSource));
+    let branchNames: BranchInfo[] = [];
+
+    if (gitLogDataWithSource.code === CommandResultCode.Success) {
+        branchNames = commits.map((commit) => getBranchInfoByCommitHash(commit.hash, gitLogDataWithSource.result));
+    }
 
     return commits.map((commit, i) => ({
         ...commit,
         reflog: getCommitReflog(commit.abbrevHash, ''),
-        branchInfo: branchNames[i],
+        branchInfo: branchNames[i] || {name: 'Not detected branch name'},
     }));
 };
 

@@ -1,6 +1,7 @@
 import {Url} from '@project-types/aliases';
 import {BranchCollection, BranchRefType} from '@project-types/entities';
 import {runCommand} from 'src/helpers';
+import {CommandResultCode} from 'src/constants';
 
 interface ConstructRepositoryUrlParams {
     branchName: string;
@@ -33,9 +34,17 @@ const ensureBranchesCollection = async (
     repositoryUrl: Url,
 ): Promise<BranchCollection> => {
     const branchNames = Object.keys(branchCollection);
-    const remoteNames = await Promise.all(
+    const remoteNamesResults = await Promise.all(
         branchNames.map((branchName) => runCommand(`git config --get branch.${branchName}.merge`)),
     );
+
+    const remoteNames = remoteNamesResults.map((remoteNameData) => {
+        if (remoteNameData.code === CommandResultCode.Success) {
+            return remoteNameData.result;
+        }
+
+        return 'Not detected remoteName';
+    });
 
     branchNames.map((branchName, i) => {
         const {refType} = branchCollection[branchName];
